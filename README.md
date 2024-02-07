@@ -1,79 +1,1221 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Nome do projeto: Tasks Control
 
-# Getting Started
+## Tecnologias: 
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+- **ReactNative**
+- **Nativewind**
+- **ReactQuery**
+- **VectorIcons**
 
-## Step 1: Start the Metro Server
+## Diferenciais
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+- Instalacoes para criar projetos em ReactNative
+- Bibliotecas de JavaScript bem utilizadas pela comunidade de desenvolvimentores
+- Layout seguindo padroes atuais com framework CSS
+- Manipulacao de dados por API refletindo em tempo real
 
-To start Metro, run the following command from the _root_ of your React Native project:
+
+## Instalando ReactNative
+
+Para se criar projetos com ReactNative eh necessario antes de mais nada ter o `node` instalado na maquina e `npm` ou `yarn`.
+
+Com isto teremos o `npx` instalado tambem.
+
+`npx` é um utilitário de linha de comando incluído no Node.js versão 5.2.0 e posterior. Ele é usado principalmente para executar pacotes Node.js que não estão instalados globalmente no seu sistema.
+
+## Criando e Inicializando o projeto ReactNative
+
+Com `npx` instalado vamos criar inicialmente todo o ambiente onde o projeto e suas bibliotecas serao rodadas.
 
 ```bash
-# using npm
+npx react-native init tasks_control_react_native
+```
+
+Projeto, dentro da pasta `tasks_control_react` rode o comando
+
+```bash
 npm start
-
-# OR using Yarn
-yarn start
 ```
 
-## Step 2: Start your Application
+Se o projeto Rails ja estiver rodando, sera proposto usar outra porta, basta confirmar.
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+## Configurando bibliotecas para desenvolvimento
 
-### For Android
+Para um bom desenvolvimento em projetos em `React` nao eh necessario colocar todas as bibliotecas que a comunidade disponibiliza mas usar de boas praticas. Abaixo, os comandos das bibliotecas que serao utilizadas:
 
 ```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
+npm install axios
+yarn add nativewind
+yarn add --dev tailwindcss@3.3.2
+npm install --save react-native-vector-icons
+npm install @react-navigation/native@6.1.9
+npm install react-native-screens react-native-safe-area-context
+npm install react-query
 ```
 
-### For iOS
+### axios
+
+- https://github.com/axios/axios
+- Ira realizar fazer as requisicoes em nossa API `Rails`
+
+### nativewind
+
+- https://www.nativewind.dev/
+- NativeWind usa Tailwind CSS como linguagem de script para criar um sistema de estilo universal para React Native
+
+### react-native-vector-icons
+
+- https://github.com/oblador/react-native-vector-icons
+- Icones vetoriais personalizáveis. Ideais para deixar botões, logotipos e barras de navegação ou guias, com esses ícones
+
+## @react-navigation/*
+
+- https://reactnavigation.org/docs/getting-started/
+- Oferece um conjunto de bibliotecas extras para se navegar entre components e oferecer areas visiveis independente da plataforma do celular
+
+### react-query
+
+- https://github.com/oblador/react-native-vector-icons
+- Poderoso gerenciamento de estado assíncrono para React e outros frameworks
+
+## Iniciando desenvolvimento
+
+A aplicacao em si tera as seguintes funcionalidades:
+
+- Listar tarefas (tasks)
+- Listar atualizar tarefa como completada
+- Listar projetos (projects)
+- Listar atualizar projeto como completado
+- Comunicacao entre componentes de forma contextual
+- Comunicacao com api `Rails` de forma sincrona e assincrona
+
+Antes de mais nada eh necessario configurar a base de onde as informacoes serao manipuladas. Entenda que este projeto ira consultar uma api em `Rails` que ja desenvolvemos mas poderia ser muito bem consultando um projeto em `node` ou ate mesmo um banco de dados no proprio projeto `React`
+
+### axios
+
+A configuracao da biblioteca `axios` permitira estabelecer onde operacoes na api `Rails`
+
+Entao abra o arquivo `index.js` que esta na pasta `src` e coloque o seguinte conteudo
+
+```javascript
+// abaixo de
+// import {name as appName} from './app.json';
+import axios from 'axios';
+axios.defaults.baseURL = 'https://----.ngrok-free.app';
+```
+
+### TailwindCSS
+
+Com framework css Tailwind CSS eh possivel obter de maneira bem rapida um desenvolvimento moderno e de boa aparencia. Existem sim pacotes, bibliotecas que trazem prontos, botoes, listas, tabelas etc; mas eh importante entender a base de como as coisas funcionam, nao quer dizer decorar mas sim enteder o proposito e saber se adaptar. Inice com
 
 ```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+npx tailwindcss init
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+Deixe no arquivo criado o seguinte conteudo
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+```javascript
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ["./App.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
 
-## Step 3: Modifying your App
+E tambem no arquivo `babel.config.js` com o conteudo
 
-Now that you have successfully run the app, let's modify it.
+```css
+module.exports = {
+  presets: ['module:metro-react-native-babel-preset'],
+  plugins: ["nativewind/babel"],
+};
+```
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+Reinicie a aplicacao.
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+### react-native-vector-icons
 
-## Congratulations! :tada:
+Sera necessario um pouco de cuidado neste momento para funcionar tudo corretamente pois os icones precisam estar linkados, ligados corretamente. Instalando com
 
-You've successfully run and modified your React Native App. :partying_face:
+```bash
+npm install --save react-native-vector-icons
+```
 
-### Now what?
+Seguindo a documentacao, para Android, vamos editar o arquivo `android/app/build.gradle` e adicionar
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+```gradle
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
+```
 
-# Troubleshooting
+### @react-navigation
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+Instalando como de costume, instalando
 
-# Learn More
+```bash
+yarn add @react-navigation/bottom-tabs
+yarn add @react-navigation/elements
+yarn add @react-navigation/native
+```
 
-To learn more about React Native, take a look at the following resources:
+- `react-native-navigation` pacote basico para navegacao entre os compontentes
+- O pacote `@react-navigation/bottom-tabs` é uma biblioteca utilizada para criar navegação por abas
+- O pacote `@react-navigation/elements` é uma parte da biblioteca React Navigation, que é uma ferramenta popular para adicionar navegação às aplicações
+- `@react-navigation/native` é uma biblioteca utilizada para navegação. Ela fornece uma maneira fácil e eficiente de gerenciar a navegação entre diferentes telas do aplicativo
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+
+Agora no arquivo `App.jsx` eh que as coisas comecam a aparecer, e vamos por partes. Primeiro criando apenas os componentes. na pasta `components` criamos `Tasks.jsx`
+
+```javascript
+import React from 'react';
+import {ScrollView, View, Text, TouchableOpacity} from 'react-native';
+
+
+const Tasks = () => {
+  return (
+    <>
+      <View className="mx-10 mt-2 flex flex-row space-x-2">
+        <Text className="text-2xl font-bold mb-4">Task List</Text>
+        <View
+          className={`rounded-full bg-orange-400 w-8 h-8 font-bold items-center justify-center flex`}>
+          <Text className="text-white">123</Text>
+        </View>
+      </View>
+      <ScrollView className="container my-2">
+        <View className="mx-4">
+          <Text className="text-black text-lg">Lista de tasks</Text>
+        </View>
+      </ScrollView>
+    </>
+  );
+};
+
+export default Tasks;
+```
+
+E nosso `App.tsx` com
+
+```javascript
+import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import Tasks from './components/Tasks';
+
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Tasks />
+    </NavigationContainer>
+  );
+};
+
+export default App;
+```
+
+Perceba que ja comecamos a colocar o componente `Tasks` dentro de um `Container` de navegacao ou seja, onde sera possivel navegar entre componentes.
+
+Eh hora de parar a aplicacao e reiniciar limpando inclusive o cache, pois temos agora componentes estilizados e pode ser que seja necessario ter o cache limpo
+
+```bash
+npm start -- --reset-cache
+```
+
+Ja eh possivel ver a primeira tela. Algo que pode acontecer devido a `cache` eh que os estilos nao serem aplicados. Neste caso abra o aplicativo que gerencia seu emulador, se for Android por exemplo seria Android Studio, abra a lista de emuladores e de um `wipe` no emulador. Ou tentar o comando
+
+```bash
+cd android
+./gradlew clean
+```
+
+Ainda nao fizemos consultas utilizando justamente `react-query` porem ele ja esta pronto para ser usado. Agora vamos criar o segundo compontene e inclusive a barra de navegacao entre ambos.
+
+Componente de `projects`
+
+```javascript
+import React from 'react';
+import {ScrollView, View, Text, TouchableOpacity} from 'react-native';
+
+const Projects = () => {
+  return (
+    <>
+      <View className="mx-10 mt-2 flex flex-row space-x-2">
+        <Text className="text-2xl font-bold mb-4">Project List</Text>
+        <View
+          className={`rounded-full bg-red-400 w-8 h-8 font-bold items-center justify-center flex`}>
+          <Text className="text-white">2</Text>
+        </View>
+      </View>
+      <ScrollView className="container my-2">
+        <View className="mx-4">
+          <Text className="text-black text-lg">Lista de projects</Text>
+        </View>
+      </ScrollView>
+    </>
+  );
+};
+
+export default Projects;
+```
+
+E a barra de navegacao que ficara na parte inferior. Para isto voltamos no arquivo `App.jsx` e alteramos para
+
+```javascript
+import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import Tasks from './components/Tasks';
+import Projects from './components/Projects';
+
+const Tab = createBottomTabNavigator();
+
+const Tabs = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: '#334155',
+        },
+        tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: 'gray',
+      }}>
+      <Tab.Screen
+        name="Tasks"
+        component={Tasks}
+        options={{
+          tabBarLabel: 'Tasks',
+          tabBarIcon: ({color, size}) => (
+            <MaterialCommunityIcons
+              name="briefcase"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Projects"
+        component={Projects}
+        options={{
+          tabBarLabel: 'Projects',
+          tabBarIcon: ({color, size}) => (
+            <MaterialCommunityIcons
+              name="alpha-p-box"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
+
+const App = () => {
+  return (
+    <NavigationContainer>{<Tabs />}</NavigationContainer>
+  );
+};
+
+export default App;
+```
+
+## react-query
+
+Poderoso gerenciamento de estado assíncrono frameworks javascripts. Utilizacao para facilmente obter dados de APIs. Instalacao...
+
+```bash
+npm i react-query
+```
+
+Com `react-query` a ideia eh quase a mesma de se ter uma aplicacao sob um contexto, mas desta vez que possam ser feitas consultas e operacoes em APIs de forma bem simples alem disto passando as informacoes para nossos contextos, ou seja, um contexto realizando operacoes e apos isto passando as mesmas para os outros contextos.
+
+No arquivo `index.js` vamos colocar o a query para funcionar englobando a aplicacao
+
+```javascript
+import {AppRegistry} from 'react-native';
+import App from './App';
+import {name as appName} from './app.json';
+import axios from 'axios';
+axios.defaults.baseURL = 'https://....ngrok-free.app';
+
+import { QueryClient, QueryClientProvider} from 'react-query';
+const queryClient = new QueryClient()
+
+const RootComponent = () => (
+  <QueryClientProvider client={queryClient}>
+    <App />
+  </QueryClientProvider>
+);
+
+AppRegistry.registerComponent(appName, () => RootComponent);
+```
+
+Pronto, agora precisamos criar os contextos que irao realizar operacoes na `API` mas entenda que poderia ser em um banco local algo parecido
+
+Criamos a pasta `components/context` e o primeiro contexto sera `TaskContext.jsx`
+
+Em poucas palavras, um contexto como ja explicado, faz operacoes e pode prover informacoes, metodos, para componentes que envolver, inclusive um contexto pode estar dentro de outro contexto. Imagine que voce faz uma consulta que reflete em uma lista no centro da pagina, mas quer que o numero total seja informado no cabecalho da pagina. Mas entao voce vai pra outra pagina e o cabecalho permanece com o mesmo numero, mas outro usuario cria ou exclui um item desta lista, obviamente como os dois components estao dentro do mesmo contexto, as informacoes serao compartilhadas e mesmo nao estando na pagina, o numero no cabecalho ira mudar para os outros usuarios.
+
+```javascript
+import React, {createContext, useContext} from 'react';
+import {useQuery, useMutation} from 'react-query';
+import axios from 'axios';
+
+const TaskContext = createContext();
+
+export const TaskProvider = ({children}) => {
+  const {data, isLoading, error, refetch} = useQuery(
+    'tasks',
+    () => {
+      return axios.get('/tasks').then(response => response.data);
+    },
+    {
+      retry: 5,
+      refetchOnWindowFocus: true,
+      refetchInterval: 5000
+    },
+  );
+
+  const taskMutation = useMutation({
+    mutationFn: ({taskId}) => {
+      return axios.patch(`/tasks/${taskId}`).then(response => response.data);
+    },
+    onSuccess: data => {
+      refetch();
+    },
+  });
+
+  const completeTask = task => {
+    taskMutation.mutate({taskId: task.id});
+  };
+
+  const completedTaskCount = () => {
+    return !isLoading && data.filter(task => task.completed_at).length;
+  };
+
+  const getCompletionColor = () => {
+    if (isLoading) {
+      return 'bg-gray-400';
+    }
+
+    const count = completedTaskCount();
+    const completionPercentage = (count / data.length) * 100;
+
+    if (completionPercentage < 30) {
+      return 'bg-slate-400';
+    } else if (completionPercentage < 60) {
+      return 'bg-orange-400';
+    } else {
+      return 'bg-green-400';
+    }
+  };
+
+  return (
+    <TaskContext.Provider
+      value={{
+        tasks: data,
+        completeTask: completeTask,
+        isLoadingTasks: isLoading,
+        completedTaskCount: completedTaskCount,
+        tasksColor: getCompletionColor,
+      }}>
+      {children}
+    </TaskContext.Provider>
+  );
+};
+
+export const useTaskContext = () => {
+  return useContext(TaskContext);
+};
+
+```
+
+Veja que compartilhamos a lista de tarefas `tasks`, o metodo para marcar a tarefa como completa, o indicado se as informacoes ainda nao estao prontas para serem compartilhadas, a quantidade completada e a cor de fundo.
+
+Algo muito importante, enquanto esta uma operacao esta sendo feita, essa variavel `isLoading` fica ouvindo e pronta para dar o resultado que realmente a operacao foi feita.
+
+
+```javascript
+import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import Tasks from './components/Tasks';
+import Projects from './components/Projects';
+
+import {TaskProvider} from './components/context/TaskContext';
+import {ProjectProvider} from './components/context/ProjectContext';
+
+const Tab = createBottomTabNavigator();
+
+const Tabs = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: '#334155',
+        },
+        tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: 'gray',
+      }}>
+      <Tab.Screen
+        name="Tasks"
+        component={Tasks}
+        options={{
+          tabBarLabel: 'Tasks',
+          tabBarIcon: ({color, size}) => (
+            <MaterialCommunityIcons
+              name="briefcase"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Projects"
+        component={Projects}
+        options={{
+          tabBarLabel: 'Projects',
+          tabBarIcon: ({color, size}) => (
+            <MaterialCommunityIcons
+              name="alpha-p-box"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
+
+const App = () => {
+  return (
+    <TaskProvider>
+      <ProjectProvider>
+        <NavigationContainer>{<Tabs />}</NavigationContainer>
+      </ProjectProvider>
+    </TaskProvider>
+  );
+};
+
+export default App;
+```
+
+### Componentes
+
+Provavelmente a pasta `components` nao existe, entao crie e dentro dela o primeiro componente `Navbar.jsx`, sera a barra de navegacao do projeto mas conteudos serao acrescentados posteriormente.
+
+```javascript
+// Navbar.jsx
+import React from 'react';
+import { FaBriefcase, FaTasks, FaCheckDouble } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+
+
+const Navbar = () => {
+  return (
+    <nav className="bg-gray-800 p-4 text-white fixed w-full top-0">
+      <div className="container mx-auto flex justify-between items-center">
+        <Link to="/" className="text-lg font-bold">
+          <FaCheckDouble className='w-10 h-10 m-2' />
+        </Link>
+        <div className="flex space-x-4">
+          <Link to="/tasks" className="flex items-center space-x-2">
+            <FaTasks className="mr-2" />
+            Tasks
+          </Link>
+          <Link to="/projects" className="flex items-center space-x-2">
+            <FaBriefcase className="mr-2" />
+            Projects
+          </Link>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
+```
+
+Agora o componente `components/Tasks.jsx` com o seguinte conteudo
+
+```javascript
+// components/Tasks.jsx
+import React from 'react';
+
+const Tasks = () => {
+  return (
+    <div className="w-full px-10 mt-8">
+      <h2 className="text-2xl font-bold mb-4">Task List</h2>
+      <table className="min-w-full border border-gray-200">
+        <thead>
+          <tr>
+            <th className="border border-gray-200 px-4 py-2 text-left">Task</th>
+            <th className="border border-gray-200 px-4 py-2 text-left">Status</th>
+            <th className="border border-gray-200 px-4 py-2 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default Tasks;
+```
+
+E finalmente o componente `components/Projects.jsx` com o conteudo
+
+```javascript
+// components/Projects.jsx
+import React from 'react';
+
+const Projects = () => {
+
+  return (
+    <div className="w-full px-10 mt-8">
+      <h2 className="text-2xl font-bold mb-4">Project List</h2>
+      <table className="min-w-full border border-gray-200">
+        <thead>
+          <tr>
+            <th className="border border-gray-200 px-4 py-2 text-left">Project</th>
+            <th className="border border-gray-200 px-4 py-2 text-left">Status</th>
+            <th className="border border-gray-200 px-4 py-2 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default Projects;
+```
+
+Pronto, automaticamente a aplicacao que deve estar rodando, mas caso nao esteja inicie com o comando `npm start` e nenhum erro sera exibido e duas telas sem conteudos estirao a de tarefas e projetos (tasks, projetcs)
+
+
+### Entendeo context-api
+
+O que seria o tal de context-api? Existem formas de se trabalhar compartilhando informacoes entre si, por exemplo REDUX, mas particularmente eu abordo com context-api por ser de maneira mais facil de se entender humanamente dizendo.
+
+Ou seja, quando se tem um contexto de projetos, ali voce ira provavelmente coletar informacoes, fazer operacoes e expor para o projeto em si, outros componentes poderao pegar as mesmas informacoes. Em nossa aplicacao eh possivel entender isto da seguinte maneira:
+
+- Obtendo a lista de tarefas (tasks), podemos listar no componente `Tasks.jsx`
+- E tambem exibir a quantidade de tarefas completadas mas isto em outro componente `Navbar.jsx`
+- Isto sem precisar ter que fazer duas consultas a `api`, e caso ocorra alguma modificacao na lista de tarefas em algum dos componentes, como estamos dentro do contexto de tarefas como um todo, todos os lugares sofrem atualizacao.
+
+Crie o arquivo `context/TaskContext.js` com o seguinte conteudo
+
+```javascript
+import React, { createContext, useContext } from 'react';
+
+const TaskContext = createContext();
+
+export const TaskProvider = ({children}) => {
+  return <TaskContext.Provider value={{tasks: [3]}}>{children}</TaskContext.Provider>
+}
+
+export const useTaskContext = () => {
+  return useContext(TaskContext);
+};
+```
+
+E o outro contexto, de projetos no arquivo `context/ProjectContext.js` com o seguinte conteudo
+
+```javascript
+import React, { createContext, useContext } from 'react';
+
+const ProjectContext = createContext();
+
+export const ProjectProvider = ({children}) => {
+  return <ProjectContext.Provider value={{projects: [2]}}>{children}</ProjectContext.Provider>
+}
+
+export const useProjectContext = () => {
+  return useContext(ProjectContext);
+};
+```
+
+
+E no arquivo `src/App.js` vamos atualizar com os dois contextos, tasks e projects de uma vez, o arquivo ficara com o seguinte conteudo
+
+```javascript
+// App.js
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Tasks from './components/Tasks';
+import Projects from './components/Projects';
+import { TaskProvider } from './context/TaskContext';
+import { ProjectProvider } from './context/ProjectContext';
+
+const App = () => {
+  return (
+    <TaskProvider>
+      <ProjectProvider>
+        <Router>
+          <Navbar />
+          <div className="container mx-auto mt-28">
+            <Routes>
+              <Route path="/" element={<Tasks />} />
+              <Route path="/tasks" element={<Tasks />} />
+              <Route path="/projects" element={<Projects />} />
+            </Routes>
+          </div>
+        </Router>
+      </ProjectProvider>
+    </TaskProvider>
+  );
+};
+
+export default App;
+```
+
+Ou seja, agora os componentes poderao acessar informacoes compartilhadas pelos contextos, por exemplo a variavel `${tasks}` e `${projects}`.
+
+Na pratica, acrescente no arquivo `components/Tasks.jsx` o conteudo
+
+```javascript
+// components/Tasks.jsx
+import React from 'react';
+import { useTaskContext } from '../context/TaskContext';
+
+const Tasks = () => {
+  const { tasks } = useTaskContext();
+  
+  return (
+    <div className="w-full px-10 mt-8">
+      <h2 className="text-2xl font-bold mb-4">Task List - {tasks.length}</h2>
+// e o restante do arquivo nao mude
+```
+
+E tambem no arquivo `components/Projects.jsx`
+
+```javascript
+// components/Projects.jsx
+import React from 'react';
+import { useProjectContext } from '../context/ProjectContext';
+
+const Projects = () => {
+  const { projects } = useProjectContext();
+  
+  return (
+    <div className="w-full px-10 mt-8">
+      <h2 className="text-2xl font-bold mb-4">Project List {projects.length}</h2>
+// e o restante do arquivo nao mude
+```
+
+E finalmente o componente `components/Navbar.jsx` com a seguinte alteracao
+
+```javascript
+// Navbar.jsx
+import React from 'react';
+import { FaBriefcase, FaTasks, FaCheckDouble } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { useTaskContext } from '../context/TaskContext';
+import { useProjectContext } from '../context/ProjectContext';
+
+
+const Navbar = () => {
+  const { tasks } = useTaskContext();
+  const { projects } = useProjectContext();
+  
+  return (
+    <nav className="bg-gray-800 p-4 text-white fixed w-full top-0">
+      <div className="container mx-auto flex justify-between items-center">
+        <Link to="/" className="text-lg font-bold">
+          <FaCheckDouble className='w-10 h-10 m-2' />
+        </Link>
+        <div className="flex space-x-4">
+          <Link to="/tasks" className="flex items-center space-x-2">
+            <FaTasks className="mr-2" />
+            Tasks ({tasks.length})
+          </Link>
+          <Link to="/projects" className="flex items-center space-x-2">
+            <FaBriefcase className="mr-2" />
+            Projects ({projects.length})
+          </Link>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
+```
+
+Percebam que busquei as duas informacoes dos contextos que existem, ou seja, sao informacoes compartilhadas no projeto como um todo.
+
+Mas agora eh que realmente vai ficar bom pois iremos consultar na API em `Rails`
+
+### Usando React-Query para realizar operacoes na API
+
+Nunca foi tao facil receber informacoes e tambem fazer operacoes com React usando essa biblioteca.
+
+Com as operacoes sendo feitas, podemos refazer consultas de tempo em tempo ou ate mesmo em caso de falha. Tambem eh possivel disparar um evento no caso de uma funcao executada.
+
+Usaremos o `axios` e `react-query` pra tudo isto. Agora o arquivo `src/index.js` ficara assim
+
+```javascript
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './styles/tailwind.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import { QueryClient, QueryClientProvider} from 'react-query';
+import axios from 'axios';
+axios.defaults.baseURL = process.env.REACT_APP_API_HTTP_ADDRESS;
+
+const queryClient = new QueryClient()
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  </React.StrictMode>
+);
+reportWebVitals();
+```
+
+Veja que queremos ser um Cliente provedor de informacoes onde passamos via `client` uma instancia para ser utilizada como estrategia das operacoes.
+
+Entao vamos partir para os dados reais aparecendo na tela, mas por onde isso ocorre. Lembre-se que temos os contextos envolvendo os components nos contextos eh que as operacoes sao compartilhadas e tambem obtidas. Por exemplo em `TaskContext.js`
+
+```javascript
+import React, { createContext, useContext } from 'react';
+import { useQuery, useMutation } from 'react-query';
+import axios from 'axios';
+
+const TaskContext = createContext();
+
+export const TaskProvider = ({children}) => {
+  const { data, isLoading, error, refetch } = useQuery("tasks", () => { // em data obtemos os dados, isLoading retorna true ou false enquanto a consulta esta ainda sendo realizada, error eh quando acontece algum erro e refectch sinaliza realizar a consulta desta query novamente caso chamada
+      return axios.get('/tasks').then((response) => response.data);
+    },
+    {
+      retry: 5, // tentativa 5 vezes caso erros ocorram
+      refetchOnWindowFocus: true, // refaz a consulta em caso de ter saido da tela e voltar para a mesma
+      refetchInterval: 5000 // atualizacao em segundo plano de 5 em 5 seungos
+    }
+  );
+
+  // este taskMutation tera o papel de executar algo em nossa API Rails, portanto enviando uma atualizacao
+  const taskMutation = useMutation({
+    mutationFn: ({taskId}) => {
+      return axios.patch(`/tasks/${taskId}`).then((response) => response.data);
+    },
+    // Um ponto importante eh quando a operacao acima for finalizada com sucesso, algo pode ser executado, no caso estamos refazendo a busca a API
+    onSuccess: (data) => {
+      refetch()
+    }
+  })
+
+  // Estamos declarando a funcao que recebera a tarefa, task, que sera repassada a nosso contexto e portanto podendo ser chamada em qualquer lugar dos componentes
+  const completeTask = (task) => {
+    taskMutation.mutate({taskId: task.id})
+  }
+
+  // esta eh uma funcao interessante onde caso a consulta realmente tenha ocorrido pois existe o delay, filtramos para obter o numero das tarefas completadas
+  const completedTaskCount = () => {
+    return !isLoading && data.filter((task) => task.completed_at).length;
+  };
+
+  // outra funcao eh que caso a consulta ainda esteja sendo realizada, retorna o fundo cinza, entao eh feito um calculo onde, se menos de 30% estiverem completadas o fundo sera vermelho, menos de 60% sera laranja e por cima acima disto verde
+  const getCompletionColor = () => {
+    if (isLoading) {
+      return 'bg-gray-500'; 
+    }
+
+    const count = completedTaskCount();
+    const completionPercentage = (count / data.length) * 100;
+
+    if (completionPercentage < 30) {
+      return 'bg-red-500';
+    } else if (completionPercentage < 60) {
+      return 'bg-orange-500';
+    } else {
+      return 'bg-green-500';
+    }
+  };
+
+  // Entao passamos para nosso contexto prover as informacoes aos componentes todas as funcoes e dados que obtivemos, tanto na lista de tarefas quanto a barra de navegacao precisam de alguns desses dados
+  return <TaskContext.Provider value={{tasks: data, completeTask: completeTask, isLoadingTasks: isLoading, completedTaskCount: completedTaskCount, tasksColor: getCompletionColor }}>{children}</TaskContext.Provider>
+}
+
+export const useTaskContext = () => {
+  return useContext(TaskContext);
+};
+```
+
+Agora modificando o component `Tasks.jsx` teremos o seguinte codigo.
+
+Percebe-se que baseado no contexto de Task, obtemos informacoes.
+
+```javascript
+import React from 'react';
+import {ScrollView, View, Text, TouchableOpacity} from 'react-native';
+import {useTaskContext} from './context/TaskContext';
+
+
+const Tasks = () => {
+  const {tasks, completeTask, isLoadingTasks, completedTaskCount, tasksColor} = useTaskContext();
+
+  const count = !isLoadingTasks && completedTaskCount();
+  const tasksColorTheme = tasksColor();
+
+  return (
+    <>
+      <View className="mx-10 mt-2 flex flex-row space-x-2">
+        <Text className="text-2xl font-bold mb-4">Task List</Text>
+        <View
+          className={`rounded-full ${tasksColorTheme} w-8 h-8 font-bold items-center justify-center flex`}>
+          <Text className="text-white">{count}</Text>
+        </View>
+      </View>
+      <ScrollView className="container my-2">
+        <View className="mx-4">
+          {!isLoadingTasks &&
+            tasks.map(task => (
+              <View
+                key={task.id}
+                className="border-b border-gray-300 mb-4 border">
+                <Text className="border-b border-gray-300 px-4 py-2 text-left">
+                  {task.title}
+                </Text>
+                <Text className="border-b border-gray-300 px-4 py-2 text-left">
+                  {task.completed_at ? (
+                    <Text className="text-green-500">Completed</Text>
+                  ) : (
+                    <Text className="text-yellow-500">Pending</Text>
+                  )}
+                </Text>
+                <View className="border-b border-gray-300 px-4 py-2">
+                  {task.completed_at ? (
+                    <Text className="text-green-500">
+                      {new Date(task.completed_at).toLocaleString()}
+                    </Text>
+                  ) : (
+                    <TouchableOpacity
+                      className="bg-slate-500 px-2 py-1 rounded"
+                      onPress={() => completeTask(task)}>
+                      <Text className="font-bold text-white">
+                        Mark as Completed
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+            ))}
+        </View>
+      </ScrollView>
+    </>
+  );
+};
+
+export default Tasks;
+```
+
+Mas ocorrera um erro pois a aplicacao ainda nao esta envolvida por este contexto. Entao no arquivo `App.tsx` acrescentaremos e ficara assim:
+
+```javascript
+import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import Tasks from './components/Tasks';
+import Projects from './components/Projects';
+
+import {TaskProvider} from './components/context/TaskContext';
+
+const Tab = createBottomTabNavigator();
+
+const Tabs = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: '#334155',
+        },
+        tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: 'gray',
+      }}>
+      <Tab.Screen
+        name="Tasks"
+        component={Tasks}
+        options={{
+          tabBarLabel: 'Tasks',
+          tabBarIcon: ({color, size}) => (
+            <MaterialCommunityIcons
+              name="briefcase"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Projects"
+        component={Projects}
+        options={{
+          tabBarLabel: 'Projects',
+          tabBarIcon: ({color, size}) => (
+            <MaterialCommunityIcons
+              name="alpha-p-box"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
+
+const App = () => {
+  return (
+    <TaskProvider>
+      <NavigationContainer>{<Tabs />}</NavigationContainer>
+    </TaskProvider>
+  );
+};
+
+export default App;
+```
+
+E tambem precisamos do contexto de projetos `context/ProjectContext.jsx`
+
+```javascript
+import React, {createContext, useContext} from 'react';
+import {useQuery, useMutation} from 'react-query';
+import axios from 'axios';
+
+
+const ProjectContext = createContext();
+
+export const ProjectProvider = ({children}) => {
+  const {data, isLoading, error, refetch} = useQuery(
+    'projects',
+    () => {
+      return axios.get('/projects').then(response => response.data);
+    },
+    {
+      retry: 5,
+      refetchOnWindowFocus: true,
+      refetchInterval: 5000
+    },
+  );
+
+  const projectMutation = useMutation({
+    mutationFn: ({projectId}) => {
+      return axios
+        .patch(`/projects/${projectId}`)
+        .then(response => response.data);
+    },
+    onSuccess: data => {
+      refetch();
+    },
+  });
+
+  const completeProject = project => {
+    projectMutation.mutate({projectId: project.id});
+  };
+
+  const completedProjectCount = () => {
+    return !isLoading && data.filter(project => project.completed_at).length;
+  };
+
+  const getCompletionColor = () => {
+    if (isLoading) {
+      return 'bg-gray-400';
+    }
+
+    const count = completedProjectCount();
+    const completionPercentage = (count / data.length) * 100;
+
+    if (completionPercentage < 30) {
+      return 'bg-slate-400';
+    } else if (completionPercentage < 60) {
+      return 'bg-orange-400';
+    } else {
+      return 'bg-green-400';
+    }
+  };
+
+  return (
+    <ProjectContext.Provider
+      value={{
+        projects: data,
+        completeProject: completeProject,
+        isLoadingProjects: isLoading,
+        completedProjectCount: completedProjectCount,
+        projectsColor: getCompletionColor,
+      }}>
+      {children}
+    </ProjectContext.Provider>
+  );
+};
+
+export const useProjectContext = () => {
+  return useContext(ProjectContext);
+};
+```
+
+E claro tambem envolver a aplicacao no com este contexto para buscarmos informacoes e metodos onde quisermos.
+
+```javascript
+import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import Tasks from './components/Tasks';
+import Projects from './components/Projects';
+
+import {TaskProvider} from './components/context/TaskContext';
+import {ProjectProvider} from './components/context/ProjectContext';
+
+const Tab = createBottomTabNavigator();
+
+const Tabs = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: '#334155',
+        },
+        tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: 'gray',
+      }}>
+      <Tab.Screen
+        name="Tasks"
+        component={Tasks}
+        options={{
+          tabBarLabel: 'Tasks',
+          tabBarIcon: ({color, size}) => (
+            <MaterialCommunityIcons
+              name="briefcase"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Projects"
+        component={Projects}
+        options={{
+          tabBarLabel: 'Projects',
+          tabBarIcon: ({color, size}) => (
+            <MaterialCommunityIcons
+              name="alpha-p-box"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
+
+const App = () => {
+  return (
+    <TaskProvider>
+      <ProjectProvider>
+        <NavigationContainer>{<Tabs />}</NavigationContainer>
+      </ProjectProvider>
+    </TaskProvider>
+  );
+};
+
+export default App;
+```
+
+Percebam que agora sao dois contextos e finalmente alteran do o `component/Projects.jsx` para usar do que o contexto dele oferece
+
+```javascript
+import React from 'react';
+import {ScrollView, View, Text, TouchableOpacity} from 'react-native';
+import {useProjectContext} from './context/ProjectContext';
+
+const Projects = () => {
+  const {
+    projects,
+    completeProject,
+    isLoadingProjects,
+    completedProjectCount,
+    projectsColor,
+  } = useProjectContext();
+
+  const count = !isLoadingProjects && completedProjectCount();
+  const projectsColorTheme = projectsColor();
+
+  return (
+    <>
+      <View className="mx-10 mt-2 flex flex-row space-x-2">
+        <Text className="text-2xl font-bold mb-4">Project List</Text>
+        <View
+          className={`rounded-full ${projectsColorTheme} w-8 h-8 font-bold items-center justify-center flex`}>
+          <Text className="text-white">{count}</Text>
+        </View>
+      </View>
+      <ScrollView className="container my-2">
+        <View className="mx-4">
+          {!isLoadingProjects &&
+            projects.map(project => (
+              <View
+                key={project.id}
+                className="border-b border-gray-300 mb-4 border">
+                <Text className="border-b border-gray-300 px-4 py-2 text-left">
+                  {project.name}
+                </Text>
+                <Text className="border-b border-gray-300 px-4 py-2 text-left">
+                  {project.completed_at ? (
+                    <Text className="text-green-500">Completed</Text>
+                  ) : (
+                    <Text className="text-yellow-500">Pending</Text>
+                  )}
+                </Text>
+                <View className="border-b border-gray-300 px-4 py-2">
+                  {project.completed_at ? (
+                    <Text className="text-green-500">
+                      {new Date(project.completed_at).toLocaleString()}
+                    </Text>
+                  ) : (
+                    <TouchableOpacity
+                      className="bg-slate-500 px-2 py-1 rounded"
+                      onPress={() => completeProject(project)}>
+                      <Text className="font-bold text-white">
+                        Mark as Completed
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+            ))}
+        </View>
+      </ScrollView>
+    </>
+  );
+};
+
+export default Projects;
+```
