@@ -14,7 +14,7 @@ const Tasks = () => {
       <View className="mx-10 mt-2 flex flex-row space-x-2">
         <Text className="text-2xl font-bold mb-4">Task List</Text>
         <View
-          className={`rounded-full bg-${tasksColorTheme}-400 w-8 h-8 font-bold items-center justify-center flex`}>
+          className={`rounded-full ${tasksColorTheme} w-8 h-8 font-bold items-center justify-center flex`}>
           <Text className="text-white">{count}</Text>
         </View>
       </View>
