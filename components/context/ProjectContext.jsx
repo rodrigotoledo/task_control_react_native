@@ -8,7 +8,7 @@ export const ProjectProvider = ({children}) => {
   const {data, isLoading, error, refetch} = useQuery(
     'projects',
     () => {
-      return axios.get('/projects').then(response => response.data);
+      return axios.get('/api/projects').then(response => response.data);
     },
     {
       retry: 5,
@@ -20,7 +20,7 @@ export const ProjectProvider = ({children}) => {
   const projectMutation = useMutation({
     mutationFn: ({projectId}) => {
       return axios
-        .patch(`/projects/${projectId}`)
+        .patch(`/api/projects/${projectId}`)
         .then(response => response.data);
     },
     onSuccess: data => {

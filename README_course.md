@@ -1,6 +1,6 @@
 # Curso de Desenvolvimento React Native: Tasks Control
 
-Neste curso, vamos aprender a desenvolver uma aplicação web utilizando React Native, com foco no projeto Tasks Control. Este projeto permite gerenciar tarefas e projetos de forma eficiente, utilizando tecnologias modernas e boas práticas de desenvolvimento.
+Neste curso, vamos aprender a desenvolver uma aplicação móvel utilizando React Native, com foco no projeto Tasks Control. Este projeto permite gerenciar tarefas e projetos de forma eficiente, utilizando tecnologias modernas e boas práticas de desenvolvimento.
 
 ## Tecnologias Utilizadas:
 
@@ -9,14 +9,14 @@ Neste curso, vamos aprender a desenvolver uma aplicação web utilizando React N
 - **ReactQuery**
 - **VectorIcons**
 
-## Diferenciais:
+### Diferenciais
 
 - Instalações para criar projetos em ReactNative
 - Bibliotecas de JávaScript bem utilizadas pela comunidade de desenvolvimentores
 - Layout seguindo padrões atuais com framework CSS
 - Manipulação de dados por API refletindo em tempo real
 
-## Módulos do Curso:
+## Módulos do Curso
 
 ### 1. Instalando e Configurando o Ambiente de Desenvolvimento com React Native
 
@@ -32,13 +32,13 @@ Com `npx` instalado vamos criar inicialmente todo o ambiente onde o projeto e su
 npx react-native init tasks_control_react_native
 ```
 
-Projeto criado dentro da pasta `tasks_control_react`, dentro da mesma rode o comando:
+Projeto criado dentro da pasta `tasks_control_react_native`, dentro da mesma rode o comando:
 
 ```bash
 npm start
 ```
 
-Precisará de um emulador instalado, no caso estou usando AndroidStudio e o emulador dele. Será perguntado em qual dos emuladores gostaria de executar, digito `a` para rodar em `Android`
+Precisará de um emulador instalado, no caso estou usando **AndroidStudio** e o emulador dele. Será perguntado em qual dos emuladores gostaria de executar, digito `a` para rodar em **Android**
 
 Para um bom desenvolvimento em projetos em `ReactNative` não é necessário colocar todas as bibliotecas que a comunidade disponibiliza mas usar de boas práticas. Abaixo, os comandos das bibliotecas que serão utilizadas:
 
@@ -64,7 +64,7 @@ npm install react-query
 - https://reactnavigation.org/docs/getting-started/
 - Oferece um conjunto de bibliotecas extras para se navegar entre components e oferecer areas visiveis independente da plataforma do celular
 
-- https://github.com/oblador/react-native-vector-icons
+- https://tanstack.com/query/v3/
 - Poderoso gerenciamento de estado assíncrono para React e outros frameworks
 
 ### 2. Gerenciando Requisições HTTP com Axios
@@ -73,7 +73,7 @@ Utilize o Axios para realizar requisições HTTP para a API do projeto Tasks Con
 
 A configuração da biblioteca `axios` permitira estabelecer onde operações na api `Rails`
 
-Então abra o arquivo `index.js` que esta na pasta `src` e coloque o seguinte conteúdo:
+Então abra o arquivo `index.js` e coloque o seguinte conteúdo:
 
 ```javascript
 // abaixo de
@@ -82,7 +82,7 @@ import axios from 'axios';
 axios.defaults.baseURL = 'https://----.ngrok-free.app';
 ```
 
-### 3. Configurando o Layout com TailwindCSS
+### 3. Configurando o Layout com NativeWind
 
 Com framework css Tailwind CSS é possível obter de maneira bem rápida um desenvolvimento moderno e de boa aparência. Existem sim pacotes, bibliotecas que trazem prontos, botões, listas, tabelas etc; mas é importante entender a base de como as coisas funcionam, não quer dizer decorar mas sim enteder o propósito e saber se adaptar. Inice com o comando:
 
@@ -325,7 +325,6 @@ axios.defaults.baseURL = 'https://----.ngrok-free.app';
 
 const queryClient = new QueryClient()
 
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -350,7 +349,7 @@ const TaskContext = createContext();
 
 export const TaskProvider = ({children}) => {
   const { data, isLoading, error, refetch } = useQuery("tasks", () => { // em data obtemos os dados, isLoading retorna true ou false enquanto a consulta esta ainda sendo realizada, error é quando acontece algum erro e refectch sinaliza realizar a consulta desta query novamente caso chamada
-      return axios.get('/tasks').then((response) => response.data);
+      return axios.get('/api/tasks').then((response) => response.data);
     },
     {
       retry: 5, // tentativa 5 vezes caso erros ocorram
@@ -362,7 +361,7 @@ export const TaskProvider = ({children}) => {
   // este taskMutation tera o papel de executar algo em nossa API Rails, portanto enviando uma atualização
   const taskMutation = useMutation({
     mutationFn: ({taskId}) => {
-      return axios.patch(`/tasks/${taskId}`).then((response) => response.data);
+      return axios.patch(`/api/tasks/${taskId}`).then((response) => response.data);
     },
     // Um ponto importante é quando a operação acima for finalizada com sucesso, algo pode ser executado, no caso estamos refazendo a busca a API
     onSuccess: (data) => {
@@ -558,7 +557,7 @@ export const ProjectProvider = ({children}) => {
   const {data, isLoading, error, refetch} = useQuery(
     'projects',
     () => {
-      return axios.get('/projects').then(response => response.data);
+      return axios.get('/api/projects').then(response => response.data);
     },
     {
       retry: 5,
@@ -570,7 +569,7 @@ export const ProjectProvider = ({children}) => {
   const projectMutation = useMutation({
     mutationFn: ({projectId}) => {
       return axios
-        .patch(`/projects/${projectId}`)
+        .patch(`/api/projects/${projectId}`)
         .then(response => response.data);
     },
     onSuccess: data => {
