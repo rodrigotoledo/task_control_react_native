@@ -31,7 +31,7 @@ const Projects = () => {
                 key={project.id}
                 className="border-b border-gray-300 mb-4 border">
                 <Text className="border-b border-gray-300 px-4 py-2 text-left">
-                  {project.name}
+                  {project.title}
                 </Text>
                 <Text className="border-b border-gray-300 px-4 py-2 text-left">
                   {project.completed_at ? (
