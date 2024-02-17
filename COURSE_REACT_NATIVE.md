@@ -44,8 +44,8 @@ Para um bom desenvolvimento em projetos em `ReactNative` não é necessário col
 
 ```bash
 npm install axios
-yarn add nativewind
-yarn add --dev tailwindcss@3.3.2
+npm install nativewind
+npm install --save-dev tailwindcss@3.3.2
 npm install --save react-native-vector-icons
 npm install @react-navigation/native@6.1.9
 npm install react-native-screens react-native-safe-area-context
@@ -137,9 +137,9 @@ apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
 Instalando como de costume, instalando com:
 
 ```bash
-yarn add @react-navigation/bottom-tabs
-yarn add @react-navigation/elements
-yarn add @react-navigation/native
+npm install @react-navigation/bottom-tabs
+npm install @react-navigation/elements
+npm install @react-navigation/native
 ```
 
 - `react-native-navigation` pacote básico para navegação entre os compontentes
