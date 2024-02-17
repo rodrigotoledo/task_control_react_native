@@ -321,11 +321,18 @@ Usaremos o `axios` e `react-query` pra tudo isto. Agora o arquivo `index.js` fic
 import {AppRegistry} from 'react-native';
 import App from './App';
 import {name as appName} from './app.json';
-import { QueryClient, QueryClientProvider} from 'react-query';
 import axios from 'axios';
 axios.defaults.baseURL = 'https://----.ngrok-free.app';
+import { QueryClient, QueryClientProvider} from 'react-query';
+const queryClient = new QueryClient()
 
-AppRegistry.registerComponent(appName, () => App);
+const RootComponent = () => (
+  <QueryClientProvider client={queryClient}>
+    <App />
+  </QueryClientProvider>
+);
+
+AppRegistry.registerComponent(appName, () => RootComponent);
 ```
 
 Veja que queremos ser um Cliente provedor de informações onde passamos via `client` uma instancia para ser utilizada como estrategia das operações.
