@@ -6,7 +6,7 @@ import {AppRegistry} from 'react-native';
 import App from './App';
 import {name as appName} from './app.json';
 import axios from 'axios';
-axios.defaults.baseURL = 'https://5a17-2804-1b3-c002-59fc-449d-bc47-f6c8-1039.ngrok-free.app';
+axios.defaults.baseURL = 'https://876d-45-71-76-107.ngrok-free.app';
 
 import { QueryClient, QueryClientProvider} from 'react-query';
 const queryClient = new QueryClient()
