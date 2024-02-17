@@ -311,29 +311,21 @@ Nunca foi tao facil receber informações e também fazer operações com React 
 
 Com as operações sendo feitas, podemos refazer consultas de tempo em tempo ou ate mesmo em caso de falha. Tambem é possível disparar um evento no caso de uma função executada.
 
-Usaremos o `axios` e `react-query` pra tudo isto. Agora o arquivo `src/index.js` ficara assim
+Usaremos o `axios` e `react-query` pra tudo isto. Agora o arquivo `index.js` ficara assim
 
 ```javascript
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './styles/tailwind.css';
+/**
+ * @format
+ */
+
+import {AppRegistry} from 'react-native';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import {name as appName} from './app.json';
 import { QueryClient, QueryClientProvider} from 'react-query';
 import axios from 'axios';
 axios.defaults.baseURL = 'https://----.ngrok-free.app';
 
-const queryClient = new QueryClient()
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
-  </React.StrictMode>
-);
-reportWebVitals();
+AppRegistry.registerComponent(appName, () => App);
 ```
 
 Veja que queremos ser um Cliente provedor de informações onde passamos via `client` uma instancia para ser utilizada como estrategia das operações.
