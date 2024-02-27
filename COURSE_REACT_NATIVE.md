@@ -82,7 +82,7 @@ import axios from 'axios';
 axios.defaults.baseURL = 'https://----.ngrok-free.app';
 ```
 
-### 3. Configurando o Layout com NativeWind
+### 3. Configurando o Layout
 
 Com framework css Tailwind CSS é possível obter de maneira bem rápida um desenvolvimento moderno e de boa aparência. Existem sim pacotes, bibliotecas que trazem prontos, botões, listas, tabelas etc; mas é importante entender a base de como as coisas funcionam, não quer dizer decorar mas sim enteder o propósito e saber se adaptar. Inice com o comando:
 
@@ -112,13 +112,9 @@ module.exports = {
 };
 ```
 
-Reinicie a aplicação. Aconselho iniciar sem cache com:
+**Ícones**
 
-```bash
-npm start -- --reset-cache
-```
-
-### 4. Ícones, algo diferente com react-native-vector-icons
+Com ícone é necessário fazer algo diferente com react-native-vector-icons
 
 Será necessário um pouco de cuidado neste momento para funcionar tudo corretamente pois os ícones precisam estar linkados, ligados corretamente. Instalando com:
 
@@ -132,9 +128,15 @@ Seguindo a documentação, para Android, vamos editar o arquivo `android/app/bui
 apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
 ```
 
-### 5. Como a aplicação navega entre componentes com @react-navigation
+Reinicie a aplicação. Aconselho iniciar sem cache com:
 
-Instalando como de costume, instalando com:
+```bash
+npm start -- --reset-cache
+```
+
+### 4. Navegação entre Telas com React Navigation
+
+A aplicação navega utilizando @react-navigation, mas é necessário acrescentar alguns pacotes:
 
 ```bash
 npm install @react-navigation/bottom-tabs
@@ -305,7 +307,7 @@ const App = () => {
 export default App;
 ```
 
-### 6. Usando React-Query para realizar operações na API
+### 5. Usando React-Query para realizar operações na API
 
 Nunca foi tao facil receber informações e também fazer operações com React usando essa biblioteca.
 
@@ -405,143 +407,6 @@ export const useTaskContext = () => {
 };
 ```
 
-Agora modificando o component `Tasks.jsx` teremos o seguinte código.
-
-Percebe-se que baseado no contexto de Task, obtemos informações.
-
-```javascript
-import React from 'react';
-import {ScrollView, View, Text, TouchableOpacity} from 'react-native';
-import {useTaskContext} from './context/TaskContext';
-
-
-const Tasks = () => {
-  const {tasks, completeTask, isLoadingTasks, completedTaskCount, tasksColor} = useTaskContext();
-
-  const count = !isLoadingTasks && completedTaskCount();
-  const tasksColorTheme = tasksColor();
-
-  return (
-    <>
-      <View className="mx-10 mt-2 flex flex-row space-x-2">
-        <Text className="text-2xl font-bold mb-4">Task List</Text>
-        <View
-          className={`rounded-full ${tasksColorTheme} w-8 h-8 font-bold items-center justify-center flex`}>
-          <Text className="text-white">{count}</Text>
-        </View>
-      </View>
-      <ScrollView className="container my-2">
-        <View className="mx-4">
-          {!isLoadingTasks &&
-            tasks.map(task => (
-              <View
-                key={task.id}
-                className="border-b border-gray-300 mb-4 border">
-                <Text className="border-b border-gray-300 px-4 py-2 text-left">
-                  {task.title}
-                </Text>
-                <Text className="border-b border-gray-300 px-4 py-2 text-left">
-                  {task.completed_at ? (
-                    <Text className="text-green-500">Completed</Text>
-                  ) : (
-                    <Text className="text-yellow-500">Pending</Text>
-                  )}
-                </Text>
-                <View className="border-b border-gray-300 px-4 py-2">
-                  {task.completed_at ? (
-                    <Text className="text-green-500">
-                      {new Date(task.completed_at).toLocaleString()}
-                    </Text>
-                  ) : (
-                    <TouchableOpacity
-                      className="bg-slate-500 px-2 py-1 rounded"
-                      onPress={() => completeTask(task)}>
-                      <Text className="font-bold text-white">
-                        Mark as Completed
-                      </Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-              </View>
-            ))}
-        </View>
-      </ScrollView>
-    </>
-  );
-};
-
-export default Tasks;
-```
-
-Mas ocorrera um erro pois a aplicação ainda não esta envolvida por este contexto. Então no arquivo `App.tsx` acrescentaremos e ficara assim:
-
-```javascript
-import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import Tasks from './components/Tasks';
-import Projects from './components/Projects';
-
-import {TaskProvider} from './components/context/TaskContext';
-
-const Tab = createBottomTabNavigator();
-
-const Tabs = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: '#334155',
-        },
-        tabBarActiveTintColor: 'white',
-        tabBarInactiveTintColor: 'gray',
-      }}>
-      <Tab.Screen
-        name="Tasks"
-        component={Tasks}
-        options={{
-          tabBarLabel: 'Tasks',
-          tabBarIcon: ({color, size}) => (
-            <MaterialCommunityIcons
-              name="briefcase"
-              color={color}
-              size={size}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Projects"
-        component={Projects}
-        options={{
-          tabBarLabel: 'Projects',
-          tabBarIcon: ({color, size}) => (
-            <MaterialCommunityIcons
-              name="alpha-p-box"
-              color={color}
-              size={size}
-            />
-          ),
-        }}
-      />
-    </Tab.Navigator>
-  );
-};
-
-const App = () => {
-  return (
-    <TaskProvider>
-      <NavigationContainer>{<Tabs />}</NavigationContainer>
-    </TaskProvider>
-  );
-};
-
-export default App;
-```
-
 E também precisamos do contexto de projetos `context/ProjectContext.jsx`
 
 ```javascript
@@ -620,7 +485,150 @@ export const useProjectContext = () => {
 };
 ```
 
-E claro também envolver a aplicação no com este contexto para buscarmos informações e métodos onde quisermos. Novamente no arquivo `App.jsx`
+Mas ocorrera um erro pois a aplicação ainda não esta envolvida por estes contextos. Então vamos a próxima lição:
+
+### 6. Componentes da Aplicação e Integração com Context API
+
+Primeiro vamos preparar nossos componentes para receber estar dentro dos contextos:
+
+Começando com o component `component/Tasks.jsx` teremos o seguinte código:
+
+```javascript
+import React from 'react';
+import {ScrollView, View, Text, TouchableOpacity} from 'react-native';
+import {useTaskContext} from './context/TaskContext';
+
+
+const Tasks = () => {
+  const {tasks, completeTask, isLoadingTasks, completedTaskCount, tasksColor} = useTaskContext();
+
+  const count = !isLoadingTasks && completedTaskCount();
+  const tasksColorTheme = tasksColor();
+
+  return (
+    <>
+      <View className="mx-10 mt-2 flex flex-row space-x-2">
+        <Text className="text-2xl font-bold mb-4">Task List</Text>
+        <View
+          className={`rounded-full ${tasksColorTheme} w-8 h-8 font-bold items-center justify-center flex`}>
+          <Text className="text-white">{count}</Text>
+        </View>
+      </View>
+      <ScrollView className="container my-2">
+        <View className="mx-4">
+          {!isLoadingTasks &&
+            tasks.map(task => (
+              <View
+                key={task.id}
+                className="border-b border-gray-300 mb-4 border">
+                <Text className="border-b border-gray-300 px-4 py-2 text-left">
+                  {task.title}
+                </Text>
+                <Text className="border-b border-gray-300 px-4 py-2 text-left">
+                  {task.completed_at ? (
+                    <Text className="text-green-500">Completed</Text>
+                  ) : (
+                    <Text className="text-yellow-500">Pending</Text>
+                  )}
+                </Text>
+                <View className="border-b border-gray-300 px-4 py-2">
+                  {task.completed_at ? (
+                    <Text className="text-green-500">
+                      {new Date(task.completed_at).toLocaleString()}
+                    </Text>
+                  ) : (
+                    <TouchableOpacity
+                      className="bg-slate-500 px-2 py-1 rounded"
+                      onPress={() => completeTask(task)}>
+                      <Text className="font-bold text-white">
+                        Mark as Completed
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+            ))}
+        </View>
+      </ScrollView>
+    </>
+  );
+};
+
+export default Tasks;
+```
+
+E agora o `component/Projects.jsx` para usar do que o contexto que ele está envolvido:
+
+```javascript
+import React from 'react';
+import {ScrollView, View, Text, TouchableOpacity} from 'react-native';
+import {useProjectContext} from './context/ProjectContext';
+
+const Projects = () => {
+  const {
+    projects,
+    completeProject,
+    isLoadingProjects,
+    completedProjectCount,
+    projectsColor,
+  } = useProjectContext();
+
+  const count = !isLoadingProjects && completedProjectCount();
+  const projectsColorTheme = projectsColor();
+
+  return (
+    <>
+      <View className="mx-10 mt-2 flex flex-row space-x-2">
+        <Text className="text-2xl font-bold mb-4">Project List</Text>
+        <View
+          className={`rounded-full ${projectsColorTheme} w-8 h-8 font-bold items-center justify-center flex`}>
+          <Text className="text-white">{count}</Text>
+        </View>
+      </View>
+      <ScrollView className="container my-2">
+        <View className="mx-4">
+          {!isLoadingProjects &&
+            projects.map(project => (
+              <View
+                key={project.id}
+                className="border-b border-gray-300 mb-4 border">
+                <Text className="border-b border-gray-300 px-4 py-2 text-left">
+                  {project.name}
+                </Text>
+                <Text className="border-b border-gray-300 px-4 py-2 text-left">
+                  {project.completed_at ? (
+                    <Text className="text-green-500">Completed</Text>
+                  ) : (
+                    <Text className="text-yellow-500">Pending</Text>
+                  )}
+                </Text>
+                <View className="border-b border-gray-300 px-4 py-2">
+                  {project.completed_at ? (
+                    <Text className="text-green-500">
+                      {new Date(project.completed_at).toLocaleString()}
+                    </Text>
+                  ) : (
+                    <TouchableOpacity
+                      className="bg-slate-500 px-2 py-1 rounded"
+                      onPress={() => completeProject(project)}>
+                      <Text className="font-bold text-white">
+                        Mark as Completed
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+            ))}
+        </View>
+      </ScrollView>
+    </>
+  );
+};
+
+export default Projects;
+```
+
+Com os componentes prontos para operar baseando-se nos contextos precisamos estar dentro deles. Então no arquivo `App.tsx` acrescentaremos e ficara assim:
 
 ```javascript
 import React from 'react';
@@ -690,75 +698,4 @@ const App = () => {
 };
 
 export default App;
-```
-
-Percebam que agora sao dois contextos e finalmente alterando o `component/Projects.jsx` para usar do que o contexto que ele está envolvido:
-
-```javascript
-import React from 'react';
-import {ScrollView, View, Text, TouchableOpacity} from 'react-native';
-import {useProjectContext} from './context/ProjectContext';
-
-const Projects = () => {
-  const {
-    projects,
-    completeProject,
-    isLoadingProjects,
-    completedProjectCount,
-    projectsColor,
-  } = useProjectContext();
-
-  const count = !isLoadingProjects && completedProjectCount();
-  const projectsColorTheme = projectsColor();
-
-  return (
-    <>
-      <View className="mx-10 mt-2 flex flex-row space-x-2">
-        <Text className="text-2xl font-bold mb-4">Project List</Text>
-        <View
-          className={`rounded-full ${projectsColorTheme} w-8 h-8 font-bold items-center justify-center flex`}>
-          <Text className="text-white">{count}</Text>
-        </View>
-      </View>
-      <ScrollView className="container my-2">
-        <View className="mx-4">
-          {!isLoadingProjects &&
-            projects.map(project => (
-              <View
-                key={project.id}
-                className="border-b border-gray-300 mb-4 border">
-                <Text className="border-b border-gray-300 px-4 py-2 text-left">
-                  {project.name}
-                </Text>
-                <Text className="border-b border-gray-300 px-4 py-2 text-left">
-                  {project.completed_at ? (
-                    <Text className="text-green-500">Completed</Text>
-                  ) : (
-                    <Text className="text-yellow-500">Pending</Text>
-                  )}
-                </Text>
-                <View className="border-b border-gray-300 px-4 py-2">
-                  {project.completed_at ? (
-                    <Text className="text-green-500">
-                      {new Date(project.completed_at).toLocaleString()}
-                    </Text>
-                  ) : (
-                    <TouchableOpacity
-                      className="bg-slate-500 px-2 py-1 rounded"
-                      onPress={() => completeProject(project)}>
-                      <Text className="font-bold text-white">
-                        Mark as Completed
-                      </Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-              </View>
-            ))}
-        </View>
-      </ScrollView>
-    </>
-  );
-};
-
-export default Projects;
 ```

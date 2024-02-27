@@ -1,6 +1,8 @@
 import React from 'react';
-import {ScrollView, View, Text, TouchableOpacity} from 'react-native';
+import {ScrollView, View, Text, Image, TouchableOpacity} from 'react-native';
 import {useTaskContext} from './context/TaskContext';
+import axios from 'axios';
+const baseURL = axios.defaults.baseURL;
 
 
 const Tasks = () => {
@@ -25,9 +27,20 @@ const Tasks = () => {
               <View
                 key={task.id}
                 className="border-b border-gray-300 mb-4 border">
-                <Text className="border-b border-gray-300 px-4 py-2 text-left">
-                  {task.title}
-                </Text>
+                <View className="h-auto w-full justify-center items-center flex">
+                    {task.feature_image_url && (
+                      <Image
+                        className="mt-2"
+                        source={{ uri: baseURL + task.feature_image_url }}
+                        style={{ width: 100, height: 100 }} // ajuste o tamanho conforme necessário
+                        resizeMode="cover" // ajuste o modo de redimensionamento conforme necessário
+                      />
+                    )}
+                  <Text className="border-b border-gray-300 px-4 py-2 w-full">
+                    {task.title}
+                  </Text>
+                </View>
+                
                 <Text className="border-b border-gray-300 px-4 py-2 text-left">
                   {task.completed_at ? (
                     <Text className="text-green-500">Completed</Text>
