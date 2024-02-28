@@ -1,8 +1,8 @@
 import React from 'react';
 import {ScrollView, View, Text, Image, TouchableOpacity} from 'react-native';
 import {useTaskContext} from './context/TaskContext';
-import axios from 'axios';
-const baseURL = axios.defaults.baseURL;
+import Config from "react-native-config";
+const baseURL = Config.BASE_URL;
 
 
 const Tasks = () => {
