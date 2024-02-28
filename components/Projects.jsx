@@ -1,8 +1,8 @@
 import React from 'react';
 import {ScrollView, View, Text, Image, TouchableOpacity} from 'react-native';
 import {useProjectContext} from './context/ProjectContext';
-import axios from 'axios';
-const baseURL = axios.defaults.baseURL;
+import Config from "react-native-config";
+const baseURL = Config.BASE_URL;
 
 const Projects = () => {
   const {
@@ -32,16 +32,19 @@ const Projects = () => {
               <View
                 key={project.id}
                 className="border-b border-gray-300 mb-4 border">
-                <Text className="border-b border-gray-300 px-4 py-2 text-left">
-                  {project.title}
-                </Text>
-                {project.feature_image_url && (
-                  <Image
-                    source={{ uri: baseURL + project.feature_image_url }}
-                    style={{ width: 100, height: 100 }} // ajuste o tamanho conforme necessário
-                    resizeMode="cover" // ajuste o modo de redimensionamento conforme necessário
-                  />
-                )}
+                <View className="h-auto w-full justify-center items-center flex">
+                    {project.feature_image_url && (
+                      <Image
+                        className="mt-2"
+                        source={{ uri: baseURL + project.feature_image_url }}
+                        style={{ width: 100, height: 100 }} // ajuste o tamanho conforme necessário
+                        resizeMode="cover" // ajuste o modo de redimensionamento conforme necessário
+                      />
+                    )}
+                  <Text className="border-b border-gray-300 px-4 py-2 w-full">
+                    {project.title}
+                  </Text>
+                </View>
                 <Text className="border-b border-gray-300 px-4 py-2 text-left">
                   {project.completed_at ? (
                     <Text className="text-green-500">Completed</Text>
