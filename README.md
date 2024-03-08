@@ -776,7 +776,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles/tailwind.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 import { QueryClient, QueryClientProvider} from 'react-query';
 import axios from 'axios';
 axios.defaults.baseURL = 'https://----.ngrok-free.app';
@@ -792,7 +791,6 @@ root.render(
     </QueryClientProvider>
   </React.StrictMode>
 );
-reportWebVitals();
 ```
 
 Veja que queremos ser um Cliente provedor de informações onde passamos via `client` uma instancia para ser utilizada como estrategia das operações.
