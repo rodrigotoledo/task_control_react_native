@@ -2,7 +2,9 @@ import React from 'react';
 import {ScrollView, View, Text, Image, TouchableOpacity} from 'react-native';
 import {useProjectContext} from './context/ProjectContext';
 import Config from "react-native-config";
-const baseURL = Config.BASE_URL;
+import axios from 'axios';
+axios.defaults.baseURL = Config.BASE_URL;
+const baseURL = axios.defaults.baseURL;
 
 const Projects = () => {
   const {
