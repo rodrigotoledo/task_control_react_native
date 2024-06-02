@@ -27,7 +27,7 @@ const TasksScreen = () => {
       <ScrollView className="container my-2">
         <View className="mx-4">
           {!isLoadingTasks &&
-            tasks.map(task => (
+            tasks?.map(task => (
               <View
                 key={task.id}
                 className="border-b border-gray-300 mb-4 border">

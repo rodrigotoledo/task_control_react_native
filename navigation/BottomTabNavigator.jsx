@@ -3,9 +3,9 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import ProjectsScreen from '../screens/ProjectsScreen';
-// import CrudProjectScreen from '../screens/CrudProjectScreen';
+import CrudProjectScreen from '../screens/CrudProjectScreen';
 import TasksScreen from '../screens/TasksScreen';
-// import CrudTaskScreen from '../screens/CrudTaskScreen';
+import CrudTaskScreen from '../screens/CrudTaskScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -28,7 +28,7 @@ const BottomTabNavigator = () => {
           ),
         }}
       />
-{/* 
+
       <Tab.Screen
         name="CrudTaskScreen"
         component={CrudTaskScreen}
@@ -37,8 +37,8 @@ const BottomTabNavigator = () => {
           tabBarButton: () => null,
           tabBarVisible: false
         }}
-      /> */}
-{/* 
+      />
+
       <Tab.Screen
         name="CrudProjectScreen"
         component={CrudProjectScreen}
@@ -47,7 +47,7 @@ const BottomTabNavigator = () => {
           tabBarButton: () => null,
           tabBarVisible: false
         }}
-      /> */}
+      />
 
       <Tab.Screen
         name="ProjectsScreen"

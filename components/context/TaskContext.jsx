@@ -68,7 +68,7 @@ export const TaskProvider = ({children}) => {
   };
 
   const completedTaskCount = () => {
-    return !isLoading && data.filter(task => task.completed_at).length;
+    return !isLoading && data?.filter(task => task.completed_at).length;
   };
 
   const getCompletionColor = () => {
@@ -77,7 +77,7 @@ export const TaskProvider = ({children}) => {
     }
 
     const count = completedTaskCount();
-    const completionPercentage = (count / data.length) * 100;
+    const completionPercentage = (count / data?.length) * 100;
 
     if (completionPercentage < 30) {
       return 'bg-red-500';

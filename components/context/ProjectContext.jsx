@@ -68,7 +68,7 @@ export const ProjectProvider = ({children}) => {
   };
 
   const completedProjectCount = () => {
-    return !isLoading && data.filter(project => project.completed_at).length;
+    return !isLoading && data?.filter(project => project.completed_at).length;
   };
 
   const getCompletionColor = () => {
@@ -77,7 +77,7 @@ export const ProjectProvider = ({children}) => {
     }
 
     const count = completedProjectCount();
-    const completionPercentage = (count / data.length) * 100;
+    const completionPercentage = (count / data?.length) * 100;
 
     if (completionPercentage < 30) {
       return 'bg-slate-400';
