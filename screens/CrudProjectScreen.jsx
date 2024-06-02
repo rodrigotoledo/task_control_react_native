@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, {useState, useCallback} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,15 +9,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import Config from 'react-native-config';
-import { useQueryClient } from '@tanstack/react-query';
-import HeaderTasks from '../components/shared/HeaderTasks';
+import {useQueryClient} from '@tanstack/react-query';
+import HeaderProjects from '../components/shared/HeaderProjects';
 import axios from 'axios';
 import ObjecErrors from '../components/shared/ObjectErrors';
-// import { launchImageLibrary } from 'react-native-image-picker';
+// import {launchImageLibrary} from 'react-native-image-picker';
 
-const CrudTaskScreen = ({ route }) => {
+const CrudProjectScreen = ({route}) => {
   const api = axios.create({
     baseURL: Config.BASE_URL,
     headers: {
@@ -25,25 +25,19 @@ const CrudTaskScreen = ({ route }) => {
       Accept: 'application/json',
     },
   });
-
   const id = route.params?.id;
   const navigation = useNavigation();
   const [title, setTitle] = useState('');
   const [featureImage, setFeatureImage] = useState('');
-  const [scheduledAt, setScheduledAt] = useState(null);
-  const [completedAt, setCompletedAt] = useState(null);
-  const [isScheduledDatePickerVisible, setScheduledDatePickerVisibility] = useState(false);
-  const [isCompletedDatePickerVisible, setCompletedDatePickerVisibility] = useState(false);
+  const [completedAt, setCompletedAt] = useState(false);
+  const [isCompletedDatePickerVisible, setCompletedDatePickerVisibility] =
+    useState(false);
   const [errors, setErrors] = useState([]);
   const queryClient = useQueryClient();
 
-  const fetchTaskDetails = async () => {
+  const fetchProjectDetails = async () => {
     try {
-      const response = await api.get(`/api/tasks/${id}`);
-      if (response.data.scheduled_at) {
-        setScheduledAt(new Date(response.data.scheduled_at));
-      }
-
+      const response = await api.get(`/api/projects/${id}`);
       if (response.data.completed_at) {
         setCompletedAt(new Date(response.data.completed_at));
       }
@@ -51,23 +45,11 @@ const CrudTaskScreen = ({ route }) => {
       if (response.data.feature_image_url) {
         setFeatureImage(Config.BASE_URL + '/' + response.data.feature_image_url);
       }
+
       setTitle(response.data.title);
     } catch (errorOnFetchData) {
-      console.error('Error fetching task details:', errorOnFetchData);
+      console.error('Error fetching project details:', errorOnFetchData);
     }
-  };
-
-  const showScheduledDatePicker = () => {
-    setScheduledDatePickerVisibility(true);
-  };
-
-  const hideScheduledDatePicker = () => {
-    setScheduledDatePickerVisibility(false);
-  };
-
-  const handleScheduledAtChange = date => {
-    setScheduledAt(date);
-    hideScheduledDatePicker();
   };
 
   const showCompletedDatePicker = () => {
@@ -89,9 +71,6 @@ const CrudTaskScreen = ({ route }) => {
     if (completedAt) {
       formData.append('completed_at', completedAt.toISOString());
     }
-    if (scheduledAt) {
-      formData.append('scheduled_at', scheduledAt.toISOString());
-    }
     if (featureImage) {
       formData.append('feature_image', {
         uri: featureImage,
@@ -102,28 +81,26 @@ const CrudTaskScreen = ({ route }) => {
 
     try {
       if (id) {
-        await api.patch(`/api/tasks/${id}`, formData);
+        await api.patch(`/api/projects/${id}`, formData);
       } else {
-        await api.post('/api/tasks', formData);
+        await api.post('/api/projects', formData);
       }
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
-      navigation.navigate('TasksScreen');
+      queryClient.invalidateQueries({queryKey: ['projects']});
+      navigation.navigate('ProjectsScreen');
     } catch (error) {
-      console.error('Error Network:', error);
       if (error.response) {
-        console.error('Error Server:', error.response.data);
         setErrors(error.response.data);
       } else if (error.request) {
-        console.error('Error without response:', error.request);
+        console.warn('Error without response:', error.request);
       } else {
-        console.error('Error unknown:', error.message);
+        console.warn('Error unknown:', error.message);
       }
     }
   };
 
   const backToList = () => {
     console.log('Back to List');
-    navigation.navigate('TasksScreen');
+    navigation.navigate('ProjectsScreen');
   };
 
   const openImagePicker = () => {
@@ -137,10 +114,13 @@ const CrudTaskScreen = ({ route }) => {
     // launchImageLibrary(options, response => {
     //   if (response.didCancel) {
     //     console.log('User cancelled image picker');
-    //   } else if (response.error) {
-    //     console.log('Image picker error: ', response.error);
+    //   } else if (response.errorMessage) {
+    //     console.log('Image picker error: ', response.errorMessage);
     //   } else {
-    //     const imageUri = response.assets?.[0]?.uri;
+    //     let imageUri =
+    //       response.assets && response.assets.length > 0
+    //         ? response.assets[0].uri
+    //         : null;
     //     setFeatureImage(imageUri);
     //   }
     // });
@@ -148,25 +128,25 @@ const CrudTaskScreen = ({ route }) => {
 
   useFocusEffect(
     useCallback(() => {
+      setErrors([]);
       setTitle('');
       setCompletedAt(null);
-      setScheduledAt(null);
       setFeatureImage('');
       if (id) {
-        fetchTaskDetails();
+        fetchProjectDetails();
       }
 
       return () => {
         setTitle('');
         setCompletedAt(null);
-        setScheduledAt(null);
+        setFeatureImage('');
       };
     }, [id]),
   );
 
   return (
     <SafeAreaView>
-      <HeaderTasks title={!id ? 'New task' : 'Editing task'} />
+      <HeaderProjects title={!id ? 'New project' : 'Editing project'} />
       <ScrollView className="flex p-4">
         {errors && <ObjecErrors errors={errors} />}
 
@@ -185,29 +165,8 @@ const CrudTaskScreen = ({ route }) => {
             </TouchableOpacity>
 
             {featureImage && (
-              <Image source={{ uri: featureImage }} className="w-40 h-40" />
+              <Image source={{uri: featureImage}} className="w-40 h-40" />
             )}
-          </View>
-          <View className="flex flex-row items-center space-x-2 mb-2">
-            <TouchableOpacity
-              className="bg-blue-400 flex flex-row p-2 rounded w-1/2 justify-center"
-              onPress={showScheduledDatePicker}>
-              <Text className="font-bold text-white text-center">
-                Scheduled AT
-              </Text>
-            </TouchableOpacity>
-            {scheduledAt && (
-              <Text className="font-bold">
-                {scheduledAt.toLocaleString('en-US', { hour12: false })}
-              </Text>
-            )}
-            <DateTimePickerModal
-              isVisible={isScheduledDatePickerVisible}
-              mode="datetime"
-              date={scheduledAt || new Date()}
-              onConfirm={handleScheduledAtChange}
-              onCancel={hideScheduledDatePicker}
-            />
           </View>
           <View className="flex flex-row items-center space-x-2">
             <TouchableOpacity
@@ -217,13 +176,13 @@ const CrudTaskScreen = ({ route }) => {
             </TouchableOpacity>
             {completedAt && (
               <Text className="font-bold">
-                {completedAt.toLocaleString('en-US', { hour12: false })}
+                {completedAt.toLocaleString('en-US', {hour12: false})}
               </Text>
             )}
             <DateTimePickerModal
               isVisible={isCompletedDatePickerVisible}
               mode="datetime"
-              date={completedAt || new Date()}
+              value={completedAt}
               onConfirm={handleCompletedAtChange}
               onCancel={hideCompletedDatePicker}
             />
@@ -234,13 +193,13 @@ const CrudTaskScreen = ({ route }) => {
           <TouchableOpacity
             onPress={onSubmit}
             className="rounded-lg py-3 px-5 bg-blue-600 cursor-pointer w-auto">
-            <Text className="text-white font-medium">Save Task</Text>
+            <Text className="text-white font-medium">Save Project</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={backToList}
             className="ml-2 rounded-lg py-3 px-5 bg-gray-400 font-medium">
-            <Text>Back to tasks</Text>
+            <Text>Back to projects</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -248,4 +207,4 @@ const CrudTaskScreen = ({ route }) => {
   );
 };
 
-export default CrudTaskScreen;
+export default CrudProjectScreen;
