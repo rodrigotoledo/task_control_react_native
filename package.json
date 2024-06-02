@@ -24,6 +24,7 @@
     "react-native": "0.73.3",
     "react-native-config": "^1.5.1",
     "react-native-gesture-handler": "^2.14.1",
+    "react-native-image-crop-picker": "^0.41.1",
     "react-native-modal-datetime-picker": "^17.1.0",
     "react-native-reanimated": "^3.6.2",
     "react-native-safe-area-context": "^4.8.2",

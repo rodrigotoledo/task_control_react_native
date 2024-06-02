@@ -28,7 +28,7 @@ const ProjectsScreen = () => {
       <ScrollView className="container my-2">
         <View className="mx-4">
           {!isLoadingProjects &&
-            projects.map(project => (
+            projects?.map(project => (
               <View
                 key={project.id}
                 className="border-b border-gray-300 mb-4 border">

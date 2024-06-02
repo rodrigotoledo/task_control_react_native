@@ -15,7 +15,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import HeaderProjects from '../components/shared/HeaderProjects';
 import axios from 'axios';
 import ObjecErrors from '../components/shared/ObjectErrors';
-// import {launchImageLibrary} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 
 const CrudProjectScreen = ({route}) => {
   const api = axios.create({
@@ -48,7 +48,7 @@ const CrudProjectScreen = ({route}) => {
 
       setTitle(response.data.title);
     } catch (errorOnFetchData) {
-      console.error('Error fetching project details:', errorOnFetchData);
+      console.warn('Error fetching project details:', errorOnFetchData);
     }
   };
 
@@ -64,6 +64,11 @@ const CrudProjectScreen = ({route}) => {
     setCompletedAt(date);
     hideCompletedDatePicker();
   };
+
+  const clearCompletedDatePicker = () => {
+    setCompletedAt(null);
+    hideCompletedDatePicker();
+  }
 
   const onSubmit = async () => {
     const formData = new FormData();
@@ -89,6 +94,7 @@ const CrudProjectScreen = ({route}) => {
       navigation.navigate('ProjectsScreen');
     } catch (error) {
       if (error.response) {
+        console.error('Error Server:', error.response.data);
         setErrors(error.response.data);
       } else if (error.request) {
         console.warn('Error without response:', error.request);
@@ -99,31 +105,21 @@ const CrudProjectScreen = ({route}) => {
   };
 
   const backToList = () => {
-    console.log('Back to List');
     navigation.navigate('ProjectsScreen');
   };
 
   const openImagePicker = () => {
-    // const options = {
-    //   mediaType: 'photo',
-    //   includeBase64: false,
-    //   maxHeight: 2000,
-    //   maxWidth: 2000,
-    // };
-
-    // launchImageLibrary(options, response => {
-    //   if (response.didCancel) {
-    //     console.log('User cancelled image picker');
-    //   } else if (response.errorMessage) {
-    //     console.log('Image picker error: ', response.errorMessage);
-    //   } else {
-    //     let imageUri =
-    //       response.assets && response.assets.length > 0
-    //         ? response.assets[0].uri
-    //         : null;
-    //     setFeatureImage(imageUri);
-    //   }
-    // });
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+      includeBase64: false,
+    }).then(image => {
+      console.log(image);
+      setFeatureImage(image.path);
+    }).catch(error => {
+      console.log('Image picker error: ', error);
+    });
   };
 
   useFocusEffect(
@@ -170,9 +166,14 @@ const CrudProjectScreen = ({route}) => {
           </View>
           <View className="flex flex-row items-center space-x-2">
             <TouchableOpacity
-              className="bg-blue-400 flex flex-row p-2 rounded w-1/2 justify-center"
+              className="bg-blue-400 flex flex-row p-2 rounded w-40 justify-center"
               onPress={showCompletedDatePicker}>
               <Text className="font-bold text-white">Completed AT</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              className="bg-gray-400 flex flex-row p-2 rounded w-20 justify-center"
+              onPress={clearCompletedDatePicker}>
+              <Text className="font-bold text-white">Clear</Text>
             </TouchableOpacity>
             {completedAt && (
               <Text className="font-bold">

@@ -3069,6 +3069,7 @@ __metadata:
     react-native: 0.73.3
     react-native-config: ^1.5.1
     react-native-gesture-handler: ^2.14.1
+    react-native-image-crop-picker: ^0.41.1
     react-native-modal-datetime-picker: ^17.1.0
     react-native-reanimated: ^3.6.2
     react-native-safe-area-context: ^4.8.2
@@ -8568,6 +8569,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-image-crop-picker@npm:^0.41.1":
+  version: 0.41.1
+  resolution: "react-native-image-crop-picker@npm:0.41.1"
+  peerDependencies:
+    react-native: ">=0.40.0"
+  checksum: e8c1b6fad6d52e32be5b684dde8f82830b31ef62cdc42591ef98534cbc7bd566b826670f6fde0401dfe1cc97c1fc5d0476e582c804b7e258db1885eac28c7800
+  languageName: node
+  linkType: hard
+
 "react-native-modal-datetime-picker@npm:^17.1.0":
   version: 17.1.0
   resolution: "react-native-modal-datetime-picker@npm:17.1.0"
@@ -10453,11 +10463,11 @@ __metadata:
   linkType: hard
 
 "yaml@npm:^2.2.1, yaml@npm:^2.3.4":
-  version: 2.4.2
-  resolution: "yaml@npm:2.4.2"
+  version: 2.4.3
+  resolution: "yaml@npm:2.4.3"
   bin:
     yaml: bin.mjs
-  checksum: 90dda4485de04367251face9abb5c36927c94e44078f4e958e6468a07e74e7e92f89be20fc49860b6268c51ee5a5fc79ef89197d3f874bf24ef8921cc4ba9013
+  checksum: cf466e40dcd39d816eb8a8fcbb069897a1ff4bff46a4bf7bb4b7940be3dfcc820901720e4ead71eb7db00229a554664161dbe4bbeb87b6ad0c1c78c12897955d
   languageName: node
   linkType: hard
 

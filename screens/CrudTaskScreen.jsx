@@ -15,7 +15,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import HeaderTasks from '../components/shared/HeaderTasks';
 import axios from 'axios';
 import ObjecErrors from '../components/shared/ObjectErrors';
-// import { launchImageLibrary } from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 
 const CrudTaskScreen = ({ route }) => {
   const api = axios.create({
@@ -53,7 +53,7 @@ const CrudTaskScreen = ({ route }) => {
       }
       setTitle(response.data.title);
     } catch (errorOnFetchData) {
-      console.error('Error fetching task details:', errorOnFetchData);
+      console.warn('Error fetching task details:', errorOnFetchData);
     }
   };
 
@@ -70,6 +70,11 @@ const CrudTaskScreen = ({ route }) => {
     hideScheduledDatePicker();
   };
 
+  const clearScheduledDatePicker = () => {
+    setScheduledAt(null);
+    hideScheduledDatePicker();
+  }
+
   const showCompletedDatePicker = () => {
     setCompletedDatePickerVisibility(true);
   };
@@ -82,6 +87,11 @@ const CrudTaskScreen = ({ route }) => {
     setCompletedAt(date);
     hideCompletedDatePicker();
   };
+
+  const clearCompletedDatePicker = () => {
+    setCompletedAt(null);
+    hideCompletedDatePicker();
+  }
 
   const onSubmit = async () => {
     const formData = new FormData();
@@ -109,41 +119,33 @@ const CrudTaskScreen = ({ route }) => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
       navigation.navigate('TasksScreen');
     } catch (error) {
-      console.error('Error Network:', error);
       if (error.response) {
         console.error('Error Server:', error.response.data);
         setErrors(error.response.data);
       } else if (error.request) {
-        console.error('Error without response:', error.request);
+        console.warn('Error without response:', error.request);
       } else {
-        console.error('Error unknown:', error.message);
+        console.warn('Error unknown:', error.message);
       }
     }
   };
 
   const backToList = () => {
-    console.log('Back to List');
     navigation.navigate('TasksScreen');
   };
 
   const openImagePicker = () => {
-    // const options = {
-    //   mediaType: 'photo',
-    //   includeBase64: false,
-    //   maxHeight: 2000,
-    //   maxWidth: 2000,
-    // };
-
-    // launchImageLibrary(options, response => {
-    //   if (response.didCancel) {
-    //     console.log('User cancelled image picker');
-    //   } else if (response.error) {
-    //     console.log('Image picker error: ', response.error);
-    //   } else {
-    //     const imageUri = response.assets?.[0]?.uri;
-    //     setFeatureImage(imageUri);
-    //   }
-    // });
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+      includeBase64: false,
+    }).then(image => {
+      console.log(image);
+      setFeatureImage(image.path);
+    }).catch(error => {
+      console.log('Image picker error: ', error);
+    });
   };
 
   useFocusEffect(
@@ -190,11 +192,16 @@ const CrudTaskScreen = ({ route }) => {
           </View>
           <View className="flex flex-row items-center space-x-2 mb-2">
             <TouchableOpacity
-              className="bg-blue-400 flex flex-row p-2 rounded w-1/2 justify-center"
+              className="bg-blue-400 flex flex-row p-2 rounded w-40 justify-center"
               onPress={showScheduledDatePicker}>
               <Text className="font-bold text-white text-center">
                 Scheduled AT
               </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              className="bg-gray-400 flex flex-row p-2 rounded w-20 justify-center"
+              onPress={clearScheduledDatePicker}>
+              <Text className="font-bold text-white">Clear</Text>
             </TouchableOpacity>
             {scheduledAt && (
               <Text className="font-bold">
@@ -211,9 +218,14 @@ const CrudTaskScreen = ({ route }) => {
           </View>
           <View className="flex flex-row items-center space-x-2">
             <TouchableOpacity
-              className="bg-blue-400 flex flex-row p-2 rounded w-1/2 justify-center"
+              className="bg-blue-400 flex flex-row p-2 rounded w-40 justify-center"
               onPress={showCompletedDatePicker}>
               <Text className="font-bold text-white">Completed AT</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              className="bg-gray-400 flex flex-row p-2 rounded w-20 justify-center"
+              onPress={clearCompletedDatePicker}>
+              <Text className="font-bold text-white">Clear</Text>
             </TouchableOpacity>
             {completedAt && (
               <Text className="font-bold">
