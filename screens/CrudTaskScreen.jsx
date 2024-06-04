@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, {useState, useCallback} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,15 +9,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import Config from 'react-native-config';
-import { useQueryClient } from '@tanstack/react-query';
+import {useQueryClient} from '@tanstack/react-query';
 import HeaderTasks from '../components/shared/HeaderTasks';
 import axios from 'axios';
 import ObjecErrors from '../components/shared/ObjectErrors';
 import ImagePicker from 'react-native-image-crop-picker';
 
-const CrudTaskScreen = ({ route }) => {
+const CrudTaskScreen = ({route}) => {
   const api = axios.create({
     baseURL: Config.BASE_URL,
     headers: {
@@ -32,8 +32,10 @@ const CrudTaskScreen = ({ route }) => {
   const [featureImage, setFeatureImage] = useState('');
   const [scheduledAt, setScheduledAt] = useState(null);
   const [completedAt, setCompletedAt] = useState(null);
-  const [isScheduledDatePickerVisible, setScheduledDatePickerVisibility] = useState(false);
-  const [isCompletedDatePickerVisible, setCompletedDatePickerVisibility] = useState(false);
+  const [isScheduledDatePickerVisible, setScheduledDatePickerVisibility] =
+    useState(false);
+  const [isCompletedDatePickerVisible, setCompletedDatePickerVisibility] =
+    useState(false);
   const [errors, setErrors] = useState([]);
   const queryClient = useQueryClient();
 
@@ -49,7 +51,9 @@ const CrudTaskScreen = ({ route }) => {
       }
 
       if (response.data.feature_image_url) {
-        setFeatureImage(Config.BASE_URL + '/' + response.data.feature_image_url);
+        setFeatureImage(
+          Config.BASE_URL + '/' + response.data.feature_image_url,
+        );
       }
       setTitle(response.data.title);
     } catch (errorOnFetchData) {
@@ -73,7 +77,7 @@ const CrudTaskScreen = ({ route }) => {
   const clearScheduledDatePicker = () => {
     setScheduledAt(null);
     hideScheduledDatePicker();
-  }
+  };
 
   const showCompletedDatePicker = () => {
     setCompletedDatePickerVisibility(true);
@@ -91,17 +95,28 @@ const CrudTaskScreen = ({ route }) => {
   const clearCompletedDatePicker = () => {
     setCompletedAt(null);
     hideCompletedDatePicker();
-  }
+  };
 
   const onSubmit = async () => {
     const formData = new FormData();
-    formData.append('title', title);
-    if (completedAt) {
-      formData.append('completed_at', completedAt.toISOString());
+    if (title) {
+      formData.append('title', title);
+    } else {
+      formData.append('title', '');
     }
+
     if (scheduledAt) {
-      formData.append('scheduled_at', scheduledAt.toISOString());
+      formData.append('scheduled_at', scheduledAt);
+    } else {
+      formData.append('scheduled_at', '');
     }
+
+    if (completedAt) {
+      formData.append('completed_at', completedAt);
+    } else {
+      formData.append('completed_at', '');
+    }
+
     if (featureImage) {
       formData.append('feature_image', {
         uri: featureImage,
@@ -116,7 +131,7 @@ const CrudTaskScreen = ({ route }) => {
       } else {
         await api.post('/api/tasks', formData);
       }
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({queryKey: ['tasks']});
       navigation.navigate('TasksScreen');
     } catch (error) {
       if (error.response) {
@@ -140,12 +155,14 @@ const CrudTaskScreen = ({ route }) => {
       height: 400,
       cropping: true,
       includeBase64: false,
-    }).then(image => {
-      console.log(image);
-      setFeatureImage(image.path);
-    }).catch(error => {
-      console.log('Image picker error: ', error);
-    });
+    })
+      .then(image => {
+        console.log(image);
+        setFeatureImage(image.path);
+      })
+      .catch(error => {
+        console.log('Image picker error: ', error);
+      });
   };
 
   useFocusEffect(
@@ -187,7 +204,7 @@ const CrudTaskScreen = ({ route }) => {
             </TouchableOpacity>
 
             {featureImage && (
-              <Image source={{ uri: featureImage }} className="w-40 h-40" />
+              <Image source={{uri: featureImage}} className="w-40 h-40" />
             )}
           </View>
           <View className="flex flex-row items-center space-x-2 mb-2">
@@ -205,7 +222,7 @@ const CrudTaskScreen = ({ route }) => {
             </TouchableOpacity>
             {scheduledAt && (
               <Text className="font-bold">
-                {scheduledAt.toLocaleString('en-US', { hour12: false })}
+                {scheduledAt.toLocaleString('en-US', {hour12: false})}
               </Text>
             )}
             <DateTimePickerModal
@@ -229,7 +246,7 @@ const CrudTaskScreen = ({ route }) => {
             </TouchableOpacity>
             {completedAt && (
               <Text className="font-bold">
-                {completedAt.toLocaleString('en-US', { hour12: false })}
+                {completedAt.toLocaleString('en-US', {hour12: false})}
               </Text>
             )}
             <DateTimePickerModal

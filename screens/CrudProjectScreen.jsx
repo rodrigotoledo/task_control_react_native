@@ -43,7 +43,9 @@ const CrudProjectScreen = ({route}) => {
       }
 
       if (response.data.feature_image_url) {
-        setFeatureImage(Config.BASE_URL + '/' + response.data.feature_image_url);
+        setFeatureImage(
+          Config.BASE_URL + '/' + response.data.feature_image_url,
+        );
       }
 
       setTitle(response.data.title);
@@ -68,13 +70,20 @@ const CrudProjectScreen = ({route}) => {
   const clearCompletedDatePicker = () => {
     setCompletedAt(null);
     hideCompletedDatePicker();
-  }
+  };
 
   const onSubmit = async () => {
     const formData = new FormData();
-    formData.append('title', title);
+    if (title) {
+      formData.append('title', title);
+    } else {
+      formData.append('title', '');
+    }
+
     if (completedAt) {
-      formData.append('completed_at', completedAt.toISOString());
+      formData.append('completed_at', completedAt);
+    } else {
+      formData.append('completed_at', '');
     }
     if (featureImage) {
       formData.append('feature_image', {
@@ -114,12 +123,13 @@ const CrudProjectScreen = ({route}) => {
       height: 400,
       cropping: true,
       includeBase64: false,
-    }).then(image => {
-      console.log(image);
-      setFeatureImage(image.path);
-    }).catch(error => {
-      console.log('Image picker error: ', error);
-    });
+    })
+      .then(image => {
+        setFeatureImage(image.path);
+      })
+      .catch(error => {
+        console.log('Image picker error: ', error);
+      });
   };
 
   useFocusEffect(
