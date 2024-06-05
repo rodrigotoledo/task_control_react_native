@@ -17,6 +17,8 @@ import axios from 'axios';
 import ObjecErrors from '../components/shared/ObjectErrors';
 import ImagePicker from 'react-native-image-crop-picker';
 
+import FileNameAndMimeType from './shared/FileNameAndMimeType';
+
 const CrudTaskScreen = ({route}) => {
   const api = axios.create({
     baseURL: Config.BASE_URL,
@@ -106,36 +108,46 @@ const CrudTaskScreen = ({route}) => {
     }
 
     if (scheduledAt) {
-      formData.append('scheduled_at', scheduledAt);
+      formData.append('scheduled_at', scheduledAt.toISOString());
     } else {
       formData.append('scheduled_at', '');
     }
 
     if (completedAt) {
-      formData.append('completed_at', completedAt);
+      formData.append('completed_at', completedAt.toISOString());
     } else {
       formData.append('completed_at', '');
     }
 
     if (featureImage) {
+      const {fileName, mimeType} = FileNameAndMimeType(featureImage);
       formData.append('feature_image', {
         uri: featureImage,
-        name: 'feature_image.jpg',
-        type: 'image/jpeg',
+        name: fileName,
+        type: mimeType,
       });
     }
 
     try {
       if (id) {
-        await api.patch(`/api/tasks/${id}`, formData);
+        await api.patch(`/api/tasks/${id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Accept: 'application/json',
+          },
+        });
       } else {
-        await api.post('/api/tasks', formData);
+        await api.post('/api/tasks', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Accept: 'application/json',
+          },
+        });
       }
       queryClient.invalidateQueries({queryKey: ['tasks']});
       navigation.navigate('TasksScreen');
     } catch (error) {
       if (error.response) {
-        console.error('Error Server:', error.response.data);
         setErrors(error.response.data);
       } else if (error.request) {
         console.warn('Error without response:', error.request);

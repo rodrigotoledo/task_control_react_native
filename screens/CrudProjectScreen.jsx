@@ -9,13 +9,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {useNavigation, useFocusEffect} from '@react-navigation/native';
-import Config from 'react-native-config';
-import {useQueryClient} from '@tanstack/react-query';
-import HeaderProjects from '../components/shared/HeaderProjects';
-import axios from 'axios';
-import ObjecErrors from '../components/shared/ObjectErrors';
 import ImagePicker from 'react-native-image-crop-picker';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
+import {useQueryClient} from '@tanstack/react-query';
+import Config from 'react-native-config';
+import axios from 'axios';
+import HeaderProjects from '../components/shared/HeaderProjects';
+import ObjecErrors from '../components/shared/ObjectErrors';
+
+import FileNameAndMimeType from './shared/FileNameAndMimeType';
 
 const CrudProjectScreen = ({route}) => {
   const api = axios.create({
@@ -29,7 +31,7 @@ const CrudProjectScreen = ({route}) => {
   const navigation = useNavigation();
   const [title, setTitle] = useState('');
   const [featureImage, setFeatureImage] = useState('');
-  const [completedAt, setCompletedAt] = useState(false);
+  const [completedAt, setCompletedAt] = useState(null);
   const [isCompletedDatePickerVisible, setCompletedDatePickerVisibility] =
     useState(false);
   const [errors, setErrors] = useState([]);
@@ -47,7 +49,6 @@ const CrudProjectScreen = ({route}) => {
           Config.BASE_URL + '/' + response.data.feature_image_url,
         );
       }
-
       setTitle(response.data.title);
     } catch (errorOnFetchData) {
       console.warn('Error fetching project details:', errorOnFetchData);
@@ -81,29 +82,40 @@ const CrudProjectScreen = ({route}) => {
     }
 
     if (completedAt) {
-      formData.append('completed_at', completedAt);
+      formData.append('completed_at', completedAt.toISOString());
     } else {
       formData.append('completed_at', '');
     }
+
     if (featureImage) {
+      const {fileName, mimeType} = FileNameAndMimeType(featureImage);
       formData.append('feature_image', {
         uri: featureImage,
-        name: 'feature_image.jpg',
-        type: 'image/jpeg',
+        name: fileName,
+        type: mimeType,
       });
     }
 
     try {
       if (id) {
-        await api.patch(`/api/projects/${id}`, formData);
+        await api.patch(`/api/projects/${id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Accept: 'application/json',
+          },
+        });
       } else {
-        await api.post('/api/projects', formData);
+        await api.post('/api/projects', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Accept: 'application/json',
+          },
+        });
       }
       queryClient.invalidateQueries({queryKey: ['projects']});
       navigation.navigate('ProjectsScreen');
     } catch (error) {
       if (error.response) {
-        console.error('Error Server:', error.response.data);
         setErrors(error.response.data);
       } else if (error.request) {
         console.warn('Error without response:', error.request);
@@ -134,7 +146,6 @@ const CrudProjectScreen = ({route}) => {
 
   useFocusEffect(
     useCallback(() => {
-      setErrors([]);
       setTitle('');
       setCompletedAt(null);
       setFeatureImage('');
@@ -145,7 +156,6 @@ const CrudProjectScreen = ({route}) => {
       return () => {
         setTitle('');
         setCompletedAt(null);
-        setFeatureImage('');
       };
     }, [id]),
   );
@@ -153,7 +163,7 @@ const CrudProjectScreen = ({route}) => {
   return (
     <SafeAreaView>
       <HeaderProjects title={!id ? 'New project' : 'Editing project'} />
-      <ScrollView className="flex p-4">
+      <ScrollView className="flex p-4 mb-10">
         {errors && <ObjecErrors errors={errors} />}
 
         <View className="mx-auto w-full mb-2 flex flex-col">
@@ -193,7 +203,7 @@ const CrudProjectScreen = ({route}) => {
             <DateTimePickerModal
               isVisible={isCompletedDatePickerVisible}
               mode="datetime"
-              value={completedAt}
+              date={completedAt || new Date()}
               onConfirm={handleCompletedAtChange}
               onCancel={hideCompletedDatePicker}
             />
