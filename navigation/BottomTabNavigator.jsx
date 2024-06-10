@@ -11,7 +11,17 @@ const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: '#334155',
+          height: 60,
+        },
+        tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: 'gray',
+      }}
+    >
       <Tab.Screen
         name="TasksScreen"
         component={TasksScreen}

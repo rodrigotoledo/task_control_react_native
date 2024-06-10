@@ -80,11 +80,11 @@ export const ProjectProvider = ({children}) => {
     const completionPercentage = (count / data?.length) * 100;
 
     if (completionPercentage < 30) {
-      return 'bg-slate-400';
+      return 'bg-red-500';
     } else if (completionPercentage < 60) {
-      return 'bg-orange-400';
+      return 'bg-orange-500';
     } else {
-      return 'bg-green-400';
+      return 'bg-green-500';
     }
   };
 

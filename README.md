@@ -1,27 +1,26 @@
-# Nome do projeto: Tasks Control
+# Project Name: Tasks Control
 
-## Tecnologias: 
+## Technologies:
 
 - **ReactNative**
 - **Nativewind**
-- **ReactQuery**
+- **Tanstack/ReactQuery+Mutations**
 - **VectorIcons**
 
-## Diferenciais
+## Differentiators
 
-- Instalações para criar projetos em ReactNative
-- Bibliotecas de JávaScript bem utilizadas pela comunidade de desenvolvimentores
-- Layout seguindo padrões atuais com framework CSS
-- Manipulação de dados por API refletindo em tempo real
+- Installations for creating React Native projects
+- JavaScript libraries well-utilized by the development community
+- Layout following current standards with a CSS framework
+- Real-time API data manipulation
 
+## Installing React Native
 
-## Instalando ReactNative
+To create projects with React Native, it's necessary to have Node.js installed on your machine, as well as yarn or yarn.
 
-Para se criar projetos com ReactNative é necessário antes de mais nada ter o `node` instalado na maquina e `npm` ou `yarn`.
+With these, `npx` will also be installed automatically.
 
-Com isto teremos o `npx` instalado também.
-
-`npx` é um utilitário de linha de comando incluído no Node.js versão 5.2.0 e posterior. Ele é usado principalmente para executar pacotes Node.js que não estão instalados globalmente no seu sistema.
+`npx` is a command-line utility included in Node.js version 5.2.0 and later. It's primarily used to run Node.js packages that are not globally installed on your system.
 
 ## Criando e Inicializando o projeto ReactNative
 
@@ -34,7 +33,7 @@ npx react-native init tasks_control_react_native
 Projeto criado dentro da pasta `tasks_control_react`, dentro da mesma rode o comando:
 
 ```bash
-npm start
+yarn start
 ```
 
 Precisará de um emulador instalado, no caso estou usando AndroidStudio e o emulador dele. Será perguntado em qual dos emuladores gostaria de executar, digito `a` para rodar em `Android`
@@ -44,13 +43,13 @@ Precisará de um emulador instalado, no caso estou usando AndroidStudio e o emul
 Para um bom desenvolvimento em projetos em `ReactNative` não é necessário colocar todas as bibliotecas que a comunidade disponibiliza mas usar de boas práticas. Abaixo, os comandos das bibliotecas que serão utilizadas:
 
 ```bash
-npm install axios
+yarn add axios
 yarn add nativewind
 yarn add --dev tailwindcss@3.3.2
-npm install --save react-native-vector-icons
-npm install @react-navigation/native@6.1.9
-npm install react-native-screens react-native-safe-area-context
-npm install react-query
+yarn add react-native-vector-icons
+yarn add @react-navigation/native@6.1.9
+yarn add react-native-screens react-native-safe-area-context
+yarn add @tanstack/config
 ```
 
 ### axios
@@ -137,7 +136,7 @@ module.exports = {
 Reinicie a aplicação. Aconselho iniciar sem cache com:
 
 ```bash
-npm start -- --reset-cache
+yarn start
 ```
 
 ### react-native-vector-icons
@@ -145,7 +144,7 @@ npm start -- --reset-cache
 Será necessário um pouco de cuidado neste momento para funcionar tudo corretamente pois os ícones precisam estar linkados, ligados corretamente. Instalando com:
 
 ```bash
-npm install --save react-native-vector-icons
+yarn add react-native-vector-icons
 ```
 
 Seguindo a documentação, para Android, vamos editar o arquivo `android/app/build.gradle` e adicionar ao final:
@@ -220,7 +219,7 @@ export default App;
 
 
 ```bash
-npm start -- --reset-cache
+yarn start
 ```
 
 Perceba que já começamos a colocar o componente `Tasks` dentro de um `Container` de navegação ou seja, onde será possível navegar entre componentes.
@@ -327,12 +326,12 @@ const App = () => {
 export default App;
 ```
 
-## react-query
+## Tanstack/ReactQuery+Mutations
 
 Poderoso gerenciamento de estado assíncrono javascripts. Utilização para facilmente obter dados de APIs. Instalação...
 
 ```bash
-npm i react-query
+yarn add @tanstack/config
 ```
 
 Com `react-query` a idéia é quase a mesma de se ter uma aplicação sob um contexto, mas desta vez que possam ser feitas consultas e operações em APIs de forma bem simples alem disto passando as informações para nossos contextos, ou seja, um contexto realizando operações e apos isto passando as mesmas para os outros contextos, de uma forma simples de entender TODO MUNDO SE CONVERSA.
@@ -606,7 +605,7 @@ const Projects = () => {
 export default Projects;
 ```
 
-Pronto, automaticamente a aplicação que deve estar rodando, mas caso não esteja inicie com o comando `npm start` e nenhum erro será exibido e duas telas sem conteúdos estirão a de tarefas e projetos (tasks, projetcs)
+Pronto, automaticamente a aplicação que deve estar rodando, mas caso não esteja inicie com o comando `yarn start` e nenhum erro será exibido e duas telas sem conteúdos estirão a de tarefas e projetos (tasks, projetcs)
 
 
 ### Entendeo context-api
