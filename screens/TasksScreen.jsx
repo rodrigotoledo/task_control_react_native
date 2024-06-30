@@ -16,7 +16,8 @@ const baseURL = Config.BASE_URL;
 
 const TasksScreen = () => {
   const navigation = useNavigation();
-  const {tasks, completeTask, destroyTask, isLoadingTasks, refetchTasks} = useTaskContext();
+  const {tasks, completeTask, destroyTask, isLoadingTasks, refetchTasks} =
+    useTaskContext();
   const keyId = `CrudTaskScreen-${Date.now()}`;
 
   useRefreshOnFocus(refetchTasks);

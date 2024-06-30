@@ -14,6 +14,11 @@ export const TaskProvider = ({children}) => {
   const {data, isLoading, refetch} = useQuery({
     queryKey: ['tasks'],
     queryFn: getTasks,
+    refetchOnReconnect: true,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    refetchIntervalInBackground: true,
+    refetchInterval: 10000,
   });
 
   const taskMutation = useMutation({
