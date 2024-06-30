@@ -14,6 +14,11 @@ export const ProjectProvider = ({children}) => {
   const {data, isLoading, refetch} = useQuery({
     queryKey: ['projects'],
     queryFn: getProjects,
+    refetchOnReconnect: true,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    refetchIntervalInBackground: true,
+    refetchInterval: 10000,
   });
 
   const projectMutation = useMutation({

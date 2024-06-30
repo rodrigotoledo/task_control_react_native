@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, {useState, useCallback} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -16,8 +16,13 @@ const baseURL = Config.BASE_URL;
 
 const ProjectsScreen = () => {
   const navigation = useNavigation();
-  const {projects, completeProject, destroyProject, isLoadingProjects, refetchProjects} =
-    useProjectContext();
+  const {
+    projects,
+    completeProject,
+    destroyProject,
+    isLoadingProjects,
+    refetchProjects,
+  } = useProjectContext();
   const keyId = `CrudProjectScreen-${Date.now()}`;
 
   useRefreshOnFocus(refetchProjects);
