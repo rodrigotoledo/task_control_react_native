@@ -6,7 +6,7 @@ Neste curso, vamos aprender a desenvolver uma aplicação móvel utilizando Reac
 
 - **ReactNative**
 - **Nativewind**
-- **ReactQuery**
+- **@tanstack/react-query**
 - **VectorIcons**
 
 ### Diferenciais
@@ -49,7 +49,7 @@ npm install --save-dev tailwindcss@3.3.2
 npm install --save react-native-vector-icons
 npm install @react-navigation/native@6.1.9
 npm install react-native-screens react-native-safe-area-context
-npm install react-query
+npm install @tanstack/react-query
 ```
 
 - https://github.com/axios/axios
@@ -212,7 +212,7 @@ cd android
 ./gradlew clean
 ```
 
-Ainda não fizemos consultas utilizando justamente `react-query` porém ele já esta pronto para ser usado. Agora vamos criar o segundo compontene e inclusive a barra de navegação entre ambos.
+Ainda não fizemos consultas utilizando justamente `@tanstack/react-query` porém ele já esta pronto para ser usado. Agora vamos criar o segundo compontene e inclusive a barra de navegação entre ambos.
 
 Componente `Projects.jsx`
 
@@ -307,13 +307,13 @@ const App = () => {
 export default App;
 ```
 
-### 5. Usando React-Query para realizar operações na API
+### 5. Usando @tanstack/react-query para realizar operações na API
 
 Nunca foi tao facil receber informações e também fazer operações com React usando essa biblioteca.
 
 Com as operações sendo feitas, podemos refazer consultas de tempo em tempo ou ate mesmo em caso de falha. Tambem é possível disparar um evento no caso de uma função executada.
 
-Usaremos o `axios` e `react-query` pra tudo isto. Agora o arquivo `index.js` ficara assim
+Usaremos o `axios` e `@tanstack/react-query` pra tudo isto. Agora o arquivo `index.js` ficara assim
 
 ```javascript
 /**
@@ -325,7 +325,7 @@ import App from './App';
 import {name as appName} from './app.json';
 import axios from 'axios';
 axios.defaults.baseURL = 'https://----.ngrok-free.app';
-import { QueryClient, QueryClientProvider} from 'react-query';
+import { QueryClient, QueryClientProvider} from '@tanstack/react-query';
 const queryClient = new QueryClient()
 
 const RootComponent = () => (
@@ -343,7 +343,7 @@ Então vamos partir para os dados reais aparecendo na tela, mas por onde isso oc
 
 ```javascript
 import React, { createContext, useContext } from 'react';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
 const TaskContext = createContext();
@@ -411,7 +411,7 @@ E também precisamos do contexto de projetos `context/ProjectContext.jsx`
 
 ```javascript
 import React, {createContext, useContext} from 'react';
-import {useQuery, useMutation} from 'react-query';
+import {useQuery, useMutation} from '@tanstack/react-query';
 import axios from 'axios';
 
 
